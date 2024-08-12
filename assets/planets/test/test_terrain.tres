@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bqppn85ksawoc"]
+
+[ext_resource type="Resource" uid="uid://dmo4guoot1u5u" path="res://assets/planets/test/noisesettings.tres" id="1_nbomd"]
+[ext_resource type="Script" path="res://scripts/planets/terrain/TerrainSettings.cs" id="2_j2gvk"]
+
+[resource]
+script = ExtResource("2_j2gvk")
+radius = 17.685
+noiseSettings = ExtResource("1_nbomd")

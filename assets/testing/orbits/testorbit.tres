@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bmy7txjr4ylwx"]
+
+[ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="1_tpotj"]
+
+[resource]
+script = ExtResource("1_tpotj")
+semiMajorAxis = 8.66462
+eccentricity = 0.198949
+inclination = 3.06659
+ascendingNodeLongitude = 4.71239
+argumentOfPeriapsis = 6.18701
+type = 0

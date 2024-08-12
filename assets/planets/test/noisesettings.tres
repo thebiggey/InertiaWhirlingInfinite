@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dmo4guoot1u5u"]
+
+[ext_resource type="Resource" uid="uid://l4vumae3w5at" path="res://assets/planets/test/noisefilter.tres" id="1_buth6"]
+[ext_resource type="Script" path="res://scripts/planets/terrain/generation/noise/NoiseSettings.cs" id="2_v3asd"]
+
+[resource]
+script = ExtResource("2_v3asd")
+noiseFilters = [ExtResource("1_buth6")]
