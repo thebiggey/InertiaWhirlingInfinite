@@ -5,14 +5,14 @@ using Godot;
 public struct CubeSurfaceArray<T>
 {
     // save what face to map to when accessing a coordinate outside Face
-    // each row represents to origin face, and the collumns represent the mappings, starting from the top, then right, bottom and left
+    // each row represents an origin face, and the collumns represent the mappings, starting from the top, then right, bottom and left
     private static readonly int[] maps = {
-        5, 3, 4, 2, // top,     0
-        4, 3, 5, 2, // bottom,  1
-        0, 4, 1, 5, // left,    2
-        0, 5, 1, 4, // right,   3
-        0, 3, 1, 2, // front,   4
-        0, 2, 1, 3  // back,    5
+        0, 3, 1, 2, // front,   0
+        0, 2, 1, 3,  // back,    1
+        5, 3, 4, 2, // top,     2
+        4, 3, 5, 2, // bottom,  3
+        0, 4, 1, 5, // left,    4
+        0, 5, 1, 4 // right,   5
     };
 
     T[,,] data;
@@ -21,9 +21,9 @@ public struct CubeSurfaceArray<T>
     public int width => data.GetLength(1);
 
 
-    public CubeSurfaceArray(int height, int width)
+    public CubeSurfaceArray(int _height, int _width)
     {
-        this.data = new T[6, width, height];
+        this.data = new T[6, _width, _height];
     }
 
     public CubeSurfaceArray(T[,,] data)
@@ -31,7 +31,7 @@ public struct CubeSurfaceArray<T>
         this.data = data;
     }
 
-    public enum Face { Top, Bottom, Left, Right, Front, Back }
+    public enum Face { Front, Back, Top, Bottom, Left, Right }
 
     public T Get(Face face, int x, int y)
     {

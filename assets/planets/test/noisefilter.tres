@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource("1_nb7vf")
-baseAmplitude = 0.07
-persistance = 0.1
-baseRoughness = 1.0
-roughness = 2.0
+baseAmplitude = 13.365
+persistance = 1.045
+baseRoughness = 2.095
+roughness = 4.325
 layers = 1
 centre = Vector3(0, 0, 0)
 minValue = -1.0

@@ -25,7 +25,7 @@ public partial class TerrainChunk : MeshInstance3D
         return quad[0] + (quad[1] - quad[0]) * tx + (quad[2] - quad[1]) * ty;
     }
 
-    public void DebugDisplay()
+    public void ConstructDebug()
     {
         ArrayMesh arrayMesh = new ArrayMesh();
 
@@ -42,8 +42,6 @@ public partial class TerrainChunk : MeshInstance3D
         arrays[(int)ArrayMesh.ArrayType.Index] = triangles;
 
         arrayMesh.AddSurfaceFromArrays(ArrayMesh.PrimitiveType.Triangles, arrays);
-
-        GD.Print(this);
 
         this.Mesh = arrayMesh;
     }
@@ -80,16 +78,16 @@ public partial class TerrainChunk : MeshInstance3D
         {
             for(int j = 0; j < resolution; j++)
             {
+                int l = i * (resolution + 1) + j;
                 int[] q = {
-                    k,
-                    k + 1,
-                    k + resolution + 1,
-                    k + resolution
+                    l,
+                    l + resolution + 1,
+                    l + resolution + 2,
+                    l + 1
                 };
 
                 AddQuad(ref triangles, k, q);
-
-                k++;
+                k += 6;
             }
         }
 
@@ -104,8 +102,6 @@ public partial class TerrainChunk : MeshInstance3D
         arrayMesh.AddSurfaceFromArrays(ArrayMesh.PrimitiveType.Triangles, arrays);
 
         this.Mesh = arrayMesh;
-
-        GD.Print(this);
     }
 
     private void AddQuad(ref int[] tris, int k, int[] quad)

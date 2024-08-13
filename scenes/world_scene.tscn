@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cf8ex730tep7q"]
+[gd_scene load_steps=12 format=3 uid="uid://cf8ex730tep7q"]
 
 [ext_resource type="Script" path="res://scripts/world/Clock.cs" id="1_i3lce"]
 [ext_resource type="Script" path="res://scripts/world/nodes/systems/PlanetarySystem.cs" id="2_amnnx"]
@@ -10,9 +10,7 @@
 [ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="6_y8dl8"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_7atar"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_2d4bt"]
-
-[sub_resource type="Resource" id="Resource_53h3n"]
+[sub_resource type="Resource" id="Resource_42x13"]
 script = ExtResource("6_y8dl8")
 semiMajorAxis = 2.94591
 eccentricity = 0.878602
@@ -62,15 +60,12 @@ script = ExtResource("5_ke0jo")
 [node name="Terrain" type="Node3D" parent="Environment/system/body/planetarybody"]
 script = ExtResource("6_oj2na")
 terrainSettings = ExtResource("7_7atar")
-chunkCount = 1
-chunkResolution = 1
+autoUpdate = true
+constructMode = 1
+chunkCount = 2
+chunkResolution = 10
 
 [node name="chunks" type="Node3D" parent="Environment/system/body/planetarybody/Terrain"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/system/body/planetarybody"]
-transform = Transform3D(9.15586, 0, 0, 0, 9.15586, 0, 0, 0, 9.15586, 0, 0, 0)
-visible = false
-mesh = SubResource("SphereMesh_2d4bt")
 
 [node name="children" type="Node3D" parent="Environment/system"]
 
@@ -78,7 +73,7 @@ mesh = SubResource("SphereMesh_2d4bt")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.30129, 0.55019, -3.65375)
 script = ExtResource("3_sijd6")
 planetarySystem = NodePath("../..")
-orbit = SubResource("Resource_53h3n")
+orbit = SubResource("Resource_42x13")
 setVelocity = Vector3(0, 0, 12)
 update = false
 

@@ -12,13 +12,12 @@ public partial class PlanetaryTerrain : Node3D
     [Export] bool init = false;
     [Export] bool update = false;
     [Export] bool autoUpdate = false;
+    [Export] bool printChunks = false;
 
 
     public enum ConstructMode { Dynamic, Uniform, Debug };
     [ExportGroup("Settings")]
-    private ConstructMode constructMode= ConstructMode.Debug;
-
-
+    [Export] ConstructMode constructMode = ConstructMode.Debug;
     [Export] int chunkCount = 1;
     [Export] int chunkResolution = 1;
 
@@ -68,10 +67,10 @@ public partial class PlanetaryTerrain : Node3D
     private static readonly int[] baseQuads = {
         0, 1, 2, 3, // front face   0
         5, 4, 7, 6, // back face    1
-        4, 5, 1, 0, // bottom face  2
-        3, 2, 6, 7, // top face     3
-        1, 5, 6, 2, // right face   4
-        4, 0, 3, 7  // left face    5
+        3, 2, 6, 7, // top face     2
+        4, 5, 1, 0, // bottom face  3
+        4, 0, 3, 7,  // left face    4
+        1, 5, 6, 2, // right face   5
     };
 
     private void Initialise()
@@ -146,9 +145,46 @@ public partial class PlanetaryTerrain : Node3D
         }
     }
 
-    private void Construct()
+    private void ConstructDynamic()
     {
         // TODO
+    }
+
+    private void ConstructDebug()
+    {
+        for(int f = 0; f < 6; f++)
+        {
+            for(int i = 0; i < chunkCount; i++)
+            {
+                for(int j = 0; j < chunkCount; j++)
+                {
+                    terrainChunks.Get(f, i, j).ConstructDebug();
+                }
+            }
+        }
+    }
+
+    private void Construct()
+    {
+        if(chunkCount != terrainChunks.height)
+        {
+            Initialise();
+        }
+
+        switch(constructMode)
+        {
+            case ConstructMode.Uniform:
+                ConstructUniform();
+            return;
+
+            case ConstructMode.Dynamic:
+                ConstructDynamic();
+            return;
+
+            case ConstructMode.Debug:
+                ConstructDebug();
+            return;
+        }
     }
 
     public override void _PhysicsProcess(double delta)
@@ -160,9 +196,25 @@ public partial class PlanetaryTerrain : Node3D
             Initialise();
         }
 
-        if(update)
+        if(update || autoUpdate)
         {
+            update = false;
+
             Construct();
+        }
+
+        if(printChunks)
+        {
+            for(int f = 0; f < 6; f++)
+            {
+                for(int i = 0; i < chunkCount; i++)
+                {
+                    for(int j = 0; j < chunkCount; j++)
+                    {
+                        GD.Print(terrainChunks.Get(f, i, j));
+                    }
+                }
+            }
         }
     }
 }

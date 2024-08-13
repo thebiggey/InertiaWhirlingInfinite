@@ -5,5 +5,5 @@
 
 [resource]
 script = ExtResource("2_j2gvk")
-radius = 17.685
+radius = 20.26
 noiseSettings = ExtResource("1_nbomd")
