@@ -25,7 +25,6 @@ public partial class Orbit : Resource
 
 	double n;
 
-
 	public double T => nMath.tau / n;
 
 	public bool isElliptical => type == Type.Elliptical;
@@ -177,41 +176,41 @@ public partial class Orbit : Resource
 		}
 
 
-	    double i = Math.Acos(h.Z / hMag);
+		double i = Math.Acos(h.Z / hMag);
 
-	    double omega = Math.Acos(n.X / nMag);
-	    if (n.Y < 0)
-	    	omega = nMath.tau - omega;
+		double omega = Math.Acos(n.X / nMag);
+		if (n.Y < 0)
+			omega = nMath.tau - omega;
 
-	    double arg = Math.Acos(eccentricityVector.Dot(n) / (e * nMag));
-	    if (eccentricityVector.Z < 0)
-	    {
+		double arg = Math.Acos(eccentricityVector.Dot(n) / (e * nMag));
+		if (eccentricityVector.Z < 0)
+		{
 			arg = nMath.tau - arg;
-	    }
+		}
 
-	    double v = Math.Acos(eccentricityVector.Dot(position) / (e * position.Length()));
-	    if(position.Dot(velocity) < 0)
-	    {
-	    	v = nMath.tau - v;
-	    }
+		double v = Math.Acos(eccentricityVector.Dot(position) / (e * position.Length()));
+		if(position.Dot(velocity) < 0)
+		{
+			v = nMath.tau - v;
+		}
 
-	    // This code catches the edge cases which cause divisions by 0 in the calculations.
-	    // in this case the orbit is equatorial
-	    if(nMag == 0)
-	    {
-	    	omega = 0;
+		// This code catches the edge cases which cause divisions by 0 in the calculations.
+		// in this case the orbit is equatorial
+		if(nMag == 0)
+		{
+			omega = 0;
 
-	    	// not sure why this is needed, but it is
-	        if(eccentricityVector.Y < 0)
-	        {
-	         	i = 0;
-	        }
-	        else
-	        {
-	        	i = nMath.pi;
-	        }
+			// not sure why this is needed, but it is
+			if(eccentricityVector.Y < 0)
+			{
+				i = 0;
+			}
+			else
+			{
+				i = nMath.pi;
+			}
 
-	        arg = nMath.tau - Math.Acos(eccentricityVector.X / e);
+			arg = nMath.tau - Math.Acos(eccentricityVector.X / e);
 		}
 
 		// Another critical edge case would be the orbit being perfectly circular, but since we account for that with the eccentricity, this isn't needed.
@@ -246,57 +245,57 @@ public partial class Orbit : Resource
 
 	double EccentricAnomalyToTrueAnomaly(double E)
 	{
-	        return 2 * Math.Atan(Math.Sqrt((1 + e) / (1 - e)) * Math.Tan(E * 0.5d));
+		return 2 * Math.Atan(Math.Sqrt((1 + e) / (1 - e)) * Math.Tan(E * 0.5d));
 	}
 
 	double TrueAnomalyToEccentricAnomaly(double v)
 	{
-	        return 2 * Math.Atan(Math.Sqrt((1 - e) / (1 + e)) * Math.Tan(v * 0.5d));
+		return 2 * Math.Atan(Math.Sqrt((1 - e) / (1 + e)) * Math.Tan(v * 0.5d));
 	}
 
 	double HyperbolicAnomalyToTrueAnomaly(double H)
 	{
-	        return 2 * Math.Atan(Math.Sqrt((e + 1) / (e - 1)) * Math.Tanh(H * 0.5d));
+		return 2 * Math.Atan(Math.Sqrt((e + 1) / (e - 1)) * Math.Tanh(H * 0.5d));
 	}
 
 	public double TrueAnomalyToHyperbolicAnomaly(double v)
 	{
-	        return 2 * Math.Atanh(Math.Sqrt((e - 1) / (e + 1)) * Math.Tan(v * 0.5d));
+		return 2 * Math.Atanh(Math.Sqrt((e - 1) / (e + 1)) * Math.Tan(v * 0.5d));
 	}
 
 	public double TrueAnomalyToTime(double v)
 	{
-	        double M;
+		double M;
 
-	        if(isElliptical)
-	        {
-	                double E = TrueAnomalyToEccentricAnomaly(v);
-	                M = E - e * Math.Sin(E);
-	        }
-	        else
-	        {
-	                double H = TrueAnomalyToHyperbolicAnomaly(v);
-	                M = e * Math.Sinh(H) - H;
-	        }
+		if(isElliptical)
+		{
+			double E = TrueAnomalyToEccentricAnomaly(v);
+			M = E - e * Math.Sin(E);
+		}
+		else
+		{
+			double H = TrueAnomalyToHyperbolicAnomaly(v);
+			M = e * Math.Sinh(H) - H;
+		}
 
-	        return M / n;
+		return M / n;
 	}
 
 
 	public double TimeToTrueAnomaly(double t, int bound = anomalyBound)
 	{
-	        double M = (n * t) % nMath.tau;
+		double M = (n * t) % nMath.tau;
 
-	        if(isElliptical)
-	        {
-	                double E = ComputeEccentricAnomaly(M, bound);
-	                return EccentricAnomalyToTrueAnomaly(E);
-	        }
-	        else
-	        {
-	                double H = ComputeHyperbolicAnomaly(M, bound);
-	                return HyperbolicAnomalyToTrueAnomaly(H);
-	        }
+		if(isElliptical)
+		{
+			double E = ComputeEccentricAnomaly(M, bound);
+			return EccentricAnomalyToTrueAnomaly(E);
+		}
+		else
+		{
+			double H = ComputeHyperbolicAnomaly(M, bound);
+			return HyperbolicAnomalyToTrueAnomaly(H);
+		}
 	}
 
 
@@ -308,26 +307,26 @@ public partial class Orbit : Resource
 
 	private double ComputeEccentricAnomaly(double M, int bound)
 	{
-	        double E = M;
+		double E = M;
 
-	        for (int i = 0; i < bound; i++)
-	        {
-	                E -= (E - e * Math.Sin(E) - M) / (1 - e * Math.Cos(E));
-	        }
+		for (int i = 0; i < bound; i++)
+		{
+			E -= (E - e * Math.Sin(E) - M) / (1 - e * Math.Cos(E));
+		}
 
-	        return E;
+		return E;
 	}
 
 	private double ComputeHyperbolicAnomaly(double M, int bound)
 	{
-	        double H = M;
+		double H = M;
 
-	        for(int i = 0; i < bound; i++)
-	        {
-	                H -= (e * Math.Sinh(H) - H - M) / (e * Math.Cosh(H) - 1);
-	        }
+		for(int i = 0; i < bound; i++)
+		{
+			H -= (e * Math.Sinh(H) - H - M) / (e * Math.Cosh(H) - 1);
+		}
 
-	        return H;
+		return H;
 	}
 
 	/// <summary>
@@ -337,41 +336,41 @@ public partial class Orbit : Resource
 	/// <returns></returns>
 	private Vector3 LocalToWorldSpace(Vector2 v)
 	{
-	        double x = v.X * XbyX + v.Y * XbyY;
-	        double y = v.X * YbyX + v.Y * YbyY;
-	        double z = v.X * ZbyX + v.Y * ZbyY;
+		double x = v.X * XbyX + v.Y * XbyY;
+		double y = v.X * YbyX + v.Y * YbyY;
+		double z = v.X * ZbyX + v.Y * ZbyY;
 
-	        return new Vector3(x, y, z);
+		return new Vector3(x, y, z);
 	}
 
 	private StateVector EllipticalStateVector(double E, double v)
 	{
-	        double r = a * (1 - (e * Math.Cos(E)));
+		double r = a * (1 - (e * Math.Cos(E)));
 
-	        Vector2 localPosition = new Vector2(Math.Cos(v), Math.Sin(v));
-
-
-	        double speed = Math.Sqrt(mu * ((2 / r) - (1 / a)));
-
-	        Vector2 localVelocity = new Vector2(-Math.Sin(E), axisRatio * Math.Cos(E));
+		Vector2 localPosition = new Vector2(Math.Cos(v), Math.Sin(v));
 
 
-	        return new StateVector(r * LocalToWorldSpace(localPosition.Normalized()), -speed * LocalToWorldSpace(localVelocity.Normalized()));
+		double speed = Math.Sqrt(mu * ((2 / r) - (1 / a)));
+
+		Vector2 localVelocity = new Vector2(-Math.Sin(E), axisRatio * Math.Cos(E));
+
+
+		return new StateVector(r * LocalToWorldSpace(localPosition.Normalized()), -speed * LocalToWorldSpace(localVelocity.Normalized()));
 	}
 
 	private StateVector HyperbolicStateVector(double H, double v)
 	{
-	        double r = a * (1 - e * Math.Cosh(H));
+		double r = a * (1 - e * Math.Cosh(H));
 
-	        Vector2 localPosition = new Vector2(Math.Cos(v), Math.Sin(v));
-
-
-	        double speed = Math.Sqrt(mu * ((2 / r) - (1 / a)));
-
-	        Vector2 localVelocity = new Vector2(-Math.Sinh(H), axisRatio * Math.Cosh(H));
+		Vector2 localPosition = new Vector2(Math.Cos(v), Math.Sin(v));
 
 
-	        return new StateVector(r * LocalToWorldSpace(localPosition.Normalized()), -speed * LocalToWorldSpace(localVelocity.Normalized()));
+		double speed = Math.Sqrt(mu * ((2 / r) - (1 / a)));
+
+		Vector2 localVelocity = new Vector2(-Math.Sinh(H), axisRatio * Math.Cosh(H));
+
+
+		return new StateVector(r * LocalToWorldSpace(localPosition.Normalized()), -speed * LocalToWorldSpace(localVelocity.Normalized()));
 	}
 
 	/// <summary>
@@ -382,26 +381,26 @@ public partial class Orbit : Resource
 	/// <returns>The state vector (position and velocity)</returns>
 	public StateVector GetStateVector(double t, int bound = anomalyBound)
 	{
-	        // Not sure why, but every angle seems to be flipped with the new cartesian implementation. There's probably a proper fix for this, but until it
-	        // actually causes issues, this works too.
-	        t *= -1;
+		// Not sure why, but every angle seems to be flipped with the new cartesian implementation. There's probably a proper fix for this, but until it
+		// actually causes issues, this works too.
+		t *= -1;
 
-	        double M = (n * t) % nMath.tau;
+		double M = (n * t) % nMath.tau;
 
-	        if(isElliptical)
-	        {
-	                double E = ComputeEccentricAnomaly(M, bound);
-	                double v = EccentricAnomalyToTrueAnomaly(E);
+		if(isElliptical)
+		{
+			double E = ComputeEccentricAnomaly(M, bound);
+			double v = EccentricAnomalyToTrueAnomaly(E);
 
-	                return EllipticalStateVector(E, v);
-	        }
-	        else
-	        {
-	                double H = ComputeHyperbolicAnomaly(M, bound);
-	                double v = HyperbolicAnomalyToTrueAnomaly(H);
+			return EllipticalStateVector(E, v);
+		}
+		else
+		{
+			double H = ComputeHyperbolicAnomaly(M, bound);
+			double v = HyperbolicAnomalyToTrueAnomaly(H);
 
-	                return HyperbolicStateVector(H, v);
-	        }
+			return HyperbolicStateVector(H, v);
+		}
 	}
 
 	/// <summary>
@@ -411,19 +410,19 @@ public partial class Orbit : Resource
 	/// <returns>The state vector (position and velocity)</returns>
 	public StateVector GetStateVectorFromTruenomaly(double v)
 	{
-	        v *= -1;
+		v *= -1;
 
-	        if(isElliptical)
-	        {
-	                double E = TrueAnomalyToEccentricAnomaly(v);
+		if(isElliptical)
+		{
+			double E = TrueAnomalyToEccentricAnomaly(v);
 
-	                return EllipticalStateVector(E, v);
-	        }
-	        else
-	        {
-	                double H = TrueAnomalyToHyperbolicAnomaly(v);
-	                return HyperbolicStateVector(H, v);
-	        }
+			return EllipticalStateVector(E, v);
+		}
+		else
+		{
+			double H = TrueAnomalyToHyperbolicAnomaly(v);
+			return HyperbolicStateVector(H, v);
+		}
 	}
 
 	/// <summary>
@@ -433,20 +432,20 @@ public partial class Orbit : Resource
 	/// <returns>The state vector relative to the parent system. In order to get the global state vector, add the parent's global state vector onto it.</returns>
 	public StateVector GetStateVectorFromEccentricAnomaly(double E)
 	{
-	        E *= -1;
+		E *= -1;
 
-	        if(isElliptical)
-	        {
-	         double v = EccentricAnomalyToTrueAnomaly(E);
+		if(isElliptical)
+		{
+			double v = EccentricAnomalyToTrueAnomaly(E);
 
-	                return EllipticalStateVector(E, v);
-	        }
-	        else
-	        {
-	                double v = HyperbolicAnomalyToTrueAnomaly(E);
+			return EllipticalStateVector(E, v);
+		}
+		else
+		{
+			double v = HyperbolicAnomalyToTrueAnomaly(E);
 
-	                return HyperbolicStateVector(E, v);
-	        }
+			return HyperbolicStateVector(E, v);
+		}
 	}
 
 	// This function returns the true anomaly at which the orbit exits the SOI (NaN if the orbit doesn't exit the SOI)
@@ -457,25 +456,25 @@ public partial class Orbit : Resource
 	private double EllipticalSphereIntersection()
 	{
 
-	        double r = planetarySystem.systemRadius;
+		double r = planetarySystem.systemRadius;
 
-	        if(Apoapsis < r) return double.NaN; // if the apoapsis is lower than the SOI radius, we can't be intersecting a sphere and we can return NaN
+		if(Apoapsis < r) return double.NaN; // if the apoapsis is lower than the SOI radius, we can't be intersecting a sphere and we can return NaN
 
-	        double b = a * axisRatio; // semi-minor axis
-	        double c = a * e; // shifting factor added to ellipse
+		double b = a * axisRatio; // semi-minor axis
+		double c = a * e; // shifting factor added to ellipse
 
-	        // squares are cached
-	        double sqA = a * a;
-	        double sqB = b * b;
-	        double sqC = c * c;
-	        double sqR = r * r;
+		// squares are cached
+		double sqA = a * a;
+		double sqB = b * b;
+		double sqC = c * c;
+		double sqR = r * r;
 
-	        // part of the equation, but saved as it's own variable for readability purposes
-	        double root = -(sqA * sqA * sqB) + (sqA * sqB * sqB) + (sqA * sqA * sqR) + (sqA * sqB * sqC) - (sqA * sqB * sqR);
+		// part of the equation, but saved as it's own variable for readability purposes
+		double root = -(sqA * sqA * sqB) + (sqA * sqB * sqB) + (sqA * sqA * sqR) + (sqA * sqB * sqC) - (sqA * sqB * sqR);
 
-	        double x = (((sqB * c) - Math.Sqrt(root)) / (sqA - sqB)); // this is the actual equation
+		double x = (((sqB * c) - Math.Sqrt(root)) / (sqA - sqB)); // this is the actual equation
 
-	        return Mathf.Acos(x / r); // get true anomaly from x value and return
+		return Mathf.Acos(x / r); // get true anomaly from x value and return
 	}
 
 	// This is a version of the function above adjusted for the case of a hyperbolic orbit.
@@ -483,21 +482,21 @@ public partial class Orbit : Resource
 	// This version shouldn't return NaN, since a hyperbolic orbit must always exit the SOI.
 	private double HyperbolicSphereIntersection()
 	{
-	        double r = planetarySystem.systemRadius;
+		double r = planetarySystem.systemRadius;
 
-	        double b = a * axisRatio;
-	        double c = Math.Sqrt(a * a + b * b);
+		double b = a * axisRatio;
+		double c = Math.Sqrt(a * a + b * b);
 
-	        double sqA = a * a;
-	        double sqB = b * b;
-	        double sqC = c * c;
-	        double sqR = r * r;
+		double sqA = a * a;
+		double sqB = b * b;
+		double sqC = c * c;
+		double sqR = r * r;
 
-	        double root = (sqA * sqA * sqB) + (sqA * sqB * sqB) - (sqA * sqB * sqC) + (sqA * sqA * sqR) + (sqA * sqB * sqR);
+		double root = (sqA * sqA * sqB) + (sqA * sqB * sqB) - (sqA * sqB * sqC) + (sqA * sqA * sqR) + (sqA * sqB * sqR);
 
-	        double x = (-(sqB * c) + Math.Sqrt(root)) / (sqA + sqB);
+		double x = (-(sqB * c) + Math.Sqrt(root)) / (sqA + sqB);
 
-	        return Math.Acos(-x / r); // hyperbola is flipped, therefore must use -x
+		return Math.Acos(-x / r); // hyperbola is flipped, therefore must use -x
 	}
 
 	/// <summary>
@@ -506,8 +505,8 @@ public partial class Orbit : Resource
 	/// <returns></returns>
 	public double SphereIntersection()
 	{
-	        if(isElliptical) return EllipticalSphereIntersection();
-	        else return HyperbolicSphereIntersection();
+		if(isElliptical) return EllipticalSphereIntersection();
+		else return HyperbolicSphereIntersection();
 	}
 
 	public override string ToString()

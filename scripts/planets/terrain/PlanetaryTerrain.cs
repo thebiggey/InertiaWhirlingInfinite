@@ -69,7 +69,7 @@ public partial class PlanetaryTerrain : Node3D
         5, 4, 7, 6, // back face    1
         3, 2, 6, 7, // top face     2
         4, 5, 1, 0, // bottom face  3
-        4, 0, 3, 7,  // left face    4
+        4, 0, 3, 7, // left face    4
         1, 5, 6, 2, // right face   5
     };
 

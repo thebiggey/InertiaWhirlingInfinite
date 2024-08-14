@@ -10,13 +10,13 @@
 [ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="6_y8dl8"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_7atar"]
 
-[sub_resource type="Resource" id="Resource_42x13"]
+[sub_resource type="Resource" id="Resource_36y8p"]
 script = ExtResource("6_y8dl8")
-semiMajorAxis = 2.94591
-eccentricity = 0.878602
-inclination = 2.90692
-ascendingNodeLongitude = 1.5708
-argumentOfPeriapsis = 3.44158
+semiMajorAxis = 5.295
+eccentricity = 0.139161
+inclination = 3.08484
+ascendingNodeLongitude = 3.14159
+argumentOfPeriapsis = 6.25752
 type = 0
 
 [sub_resource type="TorusMesh" id="TorusMesh_sny0y"]
@@ -60,7 +60,6 @@ script = ExtResource("5_ke0jo")
 [node name="Terrain" type="Node3D" parent="Environment/system/body/planetarybody"]
 script = ExtResource("6_oj2na")
 terrainSettings = ExtResource("7_7atar")
-autoUpdate = true
 constructMode = 1
 chunkCount = 2
 chunkResolution = 10
@@ -70,11 +69,11 @@ chunkResolution = 10
 [node name="children" type="Node3D" parent="Environment/system"]
 
 [node name="orbitaltest" type="Node3D" parent="Environment/system/children" node_paths=PackedStringArray("planetarySystem")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.30129, 0.55019, -3.65375)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.447967, 0.290944, -5.12067)
 script = ExtResource("3_sijd6")
 planetarySystem = NodePath("../..")
-orbit = SubResource("Resource_42x13")
-setVelocity = Vector3(0, 0, 12)
+orbit = SubResource("Resource_36y8p")
+setVelocity = Vector3(15, 0, 0)
 update = false
 
 [node name="body" type="Node3D" parent="Environment/system/children/orbitaltest"]
