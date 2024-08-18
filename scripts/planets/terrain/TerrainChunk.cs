@@ -1,16 +1,20 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 [Tool]
 public partial class TerrainChunk : MeshInstance3D
 {
-    [Export] TerrainSettings terrainSettings;
+    [Export] public TerrainSettings terrainSettings;
 
     [Export] Vector3[] quad;
 
     (int, int, int) index;
 
     Noise noise;
+
+    Godot.Collections.Array<Vector3> vertices;
+    Godot.Collections.Array<int> triangles;
 
     public void Initialise(TerrainSettings terrainSettings, (int, int, int) index, Vector3[] quad, Noise noise)
     {
@@ -36,7 +40,7 @@ public partial class TerrainChunk : MeshInstance3D
 
         int[] quadIndices = { 0, 1, 2, 3 };
 
-        AddQuad(ref triangles, 0, quadIndices);
+        MeshHelper.AddQuad(ref triangles, 0, quadIndices);
 
         arrays[(int)ArrayMesh.ArrayType.Vertex] = quad;
         arrays[(int)ArrayMesh.ArrayType.Index] = triangles;
@@ -57,6 +61,8 @@ public partial class TerrainChunk : MeshInstance3D
 
         for(int i = 0; i < resolution + 1; i++)
         {
+        Vector3 centre = (quad[0] + quad[2]) * 0.5d;
+
             double tx = (double)i / (double)resolution;
 
             for(int j = 0; j < resolution + 1; j++)
@@ -86,7 +92,7 @@ public partial class TerrainChunk : MeshInstance3D
                     l + 1
                 };
 
-                AddQuad(ref triangles, k, q);
+                MeshHelper.AddQuad(ref triangles, k, q);
                 k += 6;
             }
         }
@@ -104,15 +110,46 @@ public partial class TerrainChunk : MeshInstance3D
         this.Mesh = arrayMesh;
     }
 
-    private void AddQuad(ref int[] tris, int k, int[] quad)
+    public void ConstructDynamic(Vector3 target, int maxDepth, double splitDistance, double cullingAngle)
     {
-        tris[k + 0] = quad[2];
-        tris[k + 1] = quad[1];
-        tris[k + 2] = quad[0];
+        Vector3 centre = (quad[0] + quad[2]) * 0.5d;
 
-        tris[k + 3] = quad[0];
-        tris[k + 4] = quad[3];
-        tris[k + 5] = quad[2];
+        // This is a basic way to cull the chunk if it isn't visible by the player
+        if(nMath.CosineTheoremAngle(target.Length(), centre.Length(), (target - centre).Length()) > cullingAngle)
+            return;
+
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
+
+        /*
+        foreach(Vector3 v in quad)
+        {
+            vertices.Add(v.Normalized() * terrainSettings.radius);
+        }*/
+
+        vertices.AddRange(quad);
+
+        int[] rootquad = { 0, 1, 2, 3 };
+        TerrainQuad root = new TerrainQuad(rootquad, this);
+
+        root.GenerateChildren(0, maxDepth, splitDistance, target, vertices, triangles);
+
+        for(int i = 0; i < vertices.Count; i++)
+        {
+            vertices[i] = vertices[i].Normalized() * terrainSettings.radius;
+        }
+
+        ArrayMesh arrayMesh = new ArrayMesh();
+
+        Godot.Collections.Array arrays = new Godot.Collections.Array();
+        arrays.Resize((int)Mesh.ArrayType.Max);
+
+        arrays[(int)ArrayMesh.ArrayType.Vertex] = vertices.ToArray();
+        arrays[(int)ArrayMesh.ArrayType.Index] = triangles.ToArray();
+
+        arrayMesh.AddSurfaceFromArrays(ArrayMesh.PrimitiveType.Triangles, arrays);
+
+        this.Mesh = arrayMesh;
     }
 
     public override string ToString()

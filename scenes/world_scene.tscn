@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cf8ex730tep7q"]
+[gd_scene load_steps=13 format=3 uid="uid://cf8ex730tep7q"]
 
 [ext_resource type="Script" path="res://scripts/world/Clock.cs" id="1_i3lce"]
 [ext_resource type="Script" path="res://scripts/world/nodes/systems/PlanetarySystem.cs" id="2_amnnx"]
@@ -10,16 +10,18 @@
 [ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="6_y8dl8"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_7atar"]
 
-[sub_resource type="Resource" id="Resource_36y8p"]
+[sub_resource type="Resource" id="Resource_voqvq"]
 script = ExtResource("6_y8dl8")
-semiMajorAxis = 5.295
-eccentricity = 0.139161
+semiMajorAxis = 4.97596
+eccentricity = 0.0936124
 inclination = 3.08484
 ascendingNodeLongitude = 3.14159
-argumentOfPeriapsis = 6.25752
+argumentOfPeriapsis = 3.51941
 type = 0
 
 [sub_resource type="TorusMesh" id="TorusMesh_sny0y"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_b42fv"]
 
 [node name="WorldScene" type="Node3D"]
 
@@ -57,12 +59,15 @@ update = false
 [node name="planetarybody" type="Node3D" parent="Environment/system/body"]
 script = ExtResource("5_ke0jo")
 
-[node name="Terrain" type="Node3D" parent="Environment/system/body/planetarybody"]
+[node name="Terrain" type="Node3D" parent="Environment/system/body/planetarybody" node_paths=PackedStringArray("dynamicTarget")]
 script = ExtResource("6_oj2na")
 terrainSettings = ExtResource("7_7atar")
-constructMode = 1
-chunkCount = 2
+constructMode = 0
+chunkCount = 3
 chunkResolution = 10
+dynamicTarget = NodePath("../../../../tester")
+maxDepth = 4
+splitDistance = 15.0
 
 [node name="chunks" type="Node3D" parent="Environment/system/body/planetarybody/Terrain"]
 
@@ -72,7 +77,7 @@ chunkResolution = 10
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.447967, 0.290944, -5.12067)
 script = ExtResource("3_sijd6")
 planetarySystem = NodePath("../..")
-orbit = SubResource("Resource_36y8p")
+orbit = SubResource("Resource_voqvq")
 setVelocity = Vector3(15, 0, 0)
 update = false
 
@@ -80,3 +85,9 @@ update = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/system/children/orbitaltest/body"]
 mesh = SubResource("TorusMesh_sny0y")
+
+[node name="tester" type="Node3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.79247, 2.5227, -19.4571)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/tester"]
+mesh = SubResource("SphereMesh_b42fv")

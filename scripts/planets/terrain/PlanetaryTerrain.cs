@@ -20,6 +20,10 @@ public partial class PlanetaryTerrain : Node3D
     [Export] ConstructMode constructMode = ConstructMode.Debug;
     [Export] int chunkCount = 1;
     [Export] int chunkResolution = 1;
+    [Export] Node3D dynamicTarget;
+    [Export] double cullingAngle = 100;
+    [Export] int maxDepth = 7;
+    [Export] double splitDistance = 20;
 
     CubeSurfaceArray<TerrainChunk> terrainChunks;
 
@@ -147,7 +151,23 @@ public partial class PlanetaryTerrain : Node3D
 
     private void ConstructDynamic()
     {
-        // TODO
+        if(dynamicTarget == null)
+        {
+            GD.PrintErr($"Can't construct dynamically, as no target is set.");
+        }
+
+        Vector3 targetPosition = dynamicTarget.GlobalPosition - GlobalPosition;
+
+        for(int f = 0; f < 6; f++)
+        {
+            for(int i = 0; i < chunkCount; i++)
+            {
+                for(int j = 0; j < chunkCount; j++)
+                {
+                    terrainChunks.Get(f, i, j).ConstructDynamic(targetPosition, maxDepth, splitDistance, cullingAngle);
+                }
+            }
+        }
     }
 
     private void ConstructDebug()
