@@ -19,7 +19,11 @@ public partial class PlanetaryTerrain : Node3D
     [ExportGroup("Settings")]
     [Export] ConstructMode constructMode = ConstructMode.Debug;
     [Export] int chunkCount = 1;
+
+    // UNIFORM
     [Export] int chunkResolution = 1;
+
+    // DYNAMIC
     [Export] Node3D dynamicTarget;
     [Export] double cullingAngle = 100;
     [Export] int maxDepth = 7;
@@ -164,7 +168,7 @@ public partial class PlanetaryTerrain : Node3D
             {
                 for(int j = 0; j < chunkCount; j++)
                 {
-                    terrainChunks.Get(f, i, j).ConstructDynamic(targetPosition, maxDepth, splitDistance, cullingAngle);
+                    terrainChunks.Get(f, i, j).ConstructDynamic(targetPosition, maxDepth, splitDistance, Mathf.DegToRad(cullingAngle));
                 }
             }
         }

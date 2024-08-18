@@ -13,9 +13,6 @@ public partial class TerrainChunk : MeshInstance3D
 
     Noise noise;
 
-    Godot.Collections.Array<Vector3> vertices;
-    Godot.Collections.Array<int> triangles;
-
     public void Initialise(TerrainSettings terrainSettings, (int, int, int) index, Vector3[] quad, Noise noise)
     {
         this.terrainSettings = terrainSettings;
@@ -116,16 +113,13 @@ public partial class TerrainChunk : MeshInstance3D
 
         // This is a basic way to cull the chunk if it isn't visible by the player
         if(nMath.CosineTheoremAngle(target.Length(), centre.Length(), (target - centre).Length()) > cullingAngle)
+        {
+            this.Mesh = null;
             return;
+        }
 
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
-
-        /*
-        foreach(Vector3 v in quad)
-        {
-            vertices.Add(v.Normalized() * terrainSettings.radius);
-        }*/
 
         vertices.AddRange(quad);
 

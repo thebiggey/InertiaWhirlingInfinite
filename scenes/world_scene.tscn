@@ -63,11 +63,12 @@ script = ExtResource("5_ke0jo")
 script = ExtResource("6_oj2na")
 terrainSettings = ExtResource("7_7atar")
 constructMode = 0
-chunkCount = 3
+chunkCount = 4
 chunkResolution = 10
 dynamicTarget = NodePath("../../../../tester")
+cullingAngle = 95.0
 maxDepth = 4
-splitDistance = 15.0
+splitDistance = 16.375
 
 [node name="chunks" type="Node3D" parent="Environment/system/body/planetarybody/Terrain"]
 
@@ -87,7 +88,7 @@ update = false
 mesh = SubResource("TorusMesh_sny0y")
 
 [node name="tester" type="Node3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.79247, 2.5227, -19.4571)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.3805, 12.6561, 10.7599)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/tester"]
 mesh = SubResource("SphereMesh_b42fv")
