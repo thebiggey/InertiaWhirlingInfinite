@@ -14,12 +14,16 @@ public partial class TerrainChunk : MeshInstance3D
 
     Noise noise;
 
+    bool update;
+
     public void Initialise(TerrainSettings terrainSettings, (int, int, int) index, Vector3[] quad, Noise noise)
     {
-        this.terrainSettings = terrainSettings;
         this.index = index;
+        this.terrainSettings = terrainSettings;
         this.quad = quad;
         this.noise = noise;
+
+        this.update = false;
     }
 
     private Vector3 GetPoint(double tx, double ty)
@@ -152,14 +156,33 @@ public partial class TerrainChunk : MeshInstance3D
         rootQuad = new DynamicQuad(quad, 0, this, null);
 
         rootQuad.Generate(maxDepth, splitDistance, target);
+
+        ResetUpdate();
     }
 
-    public void UpdateTree(int maxDepth, Vector3 target, double splitDistance)
+    // I tried to implement this by returning whether the tree got updated in the update function itself,
+    // but couldn't get it to work, so I just settled on this approach
+    public void SetUpdate()
+    {
+        update = true;
+    }
+
+    public bool GetUpdate()
+    {
+        return update;
+    }
+
+    public void ResetUpdate()
+    {
+        update = false;
+    }
+
+    public void UpdateTree(Vector3 target, int maxDepth, double splitDistance)
     {
         rootQuad.Update(maxDepth, splitDistance, target);
     }
 
-    public void ConstructMesh(Vector3 target, double cullingAngle)
+    public void ConstructMesh(Vector3 target, double cullingAngle, bool update)
     {
         Vector3 centre = (quad[0] + quad[2]) * 0.5d;
 
@@ -167,6 +190,11 @@ public partial class TerrainChunk : MeshInstance3D
         if(nMath.CosineTheoremAngle(target.Length(), centre.Length(), (target - centre).Length()) > cullingAngle)
         {
             this.Mesh = null;
+            return;
+        }
+
+        if(!update && this.Mesh != null)
+        {
             return;
         }
 

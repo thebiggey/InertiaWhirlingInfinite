@@ -138,6 +138,8 @@ public partial class PlanetaryTerrain : Node3D
         terrainChunks = new CubeSurfaceArray<TerrainChunk>(chunks);
 
         GenerateDynamic();
+
+        ConstructDynamicOptimised(true);
     }
 
     private void ConstructUniform()
@@ -191,9 +193,10 @@ public partial class PlanetaryTerrain : Node3D
         }
     }
 
-    private void ConstructDynamicOptimised()
+    private void ConstructDynamicOptimised(bool overrideUpdate = false)
     {
         Vector3 target = dynamicTarget.GlobalPosition - GlobalPosition;
+        double alpha = Mathf.DegToRad(cullingAngle);
 
         for(int f = 0; f < 6; f++)
         {
@@ -201,9 +204,12 @@ public partial class PlanetaryTerrain : Node3D
             {
                 for(int j = 0; j < chunkCount; j++)
                 {
-                    terrainChunks.Get(f, i, j).UpdateTree(maxDepth, target, splitDistance);
+                    TerrainChunk chunk = terrainChunks.Get(f, i, j);
 
-                    terrainChunks.Get(f, i, j).ConstructMesh(target, Mathf.DegToRad(cullingAngle));
+                    chunk.UpdateTree(target, maxDepth, splitDistance);
+                    chunk.ConstructMesh(target, alpha, chunk.GetUpdate() || overrideUpdate);
+
+                    chunk.ResetUpdate();
                 }
             }
         }

@@ -38,6 +38,8 @@ public class DynamicQuad
             return 1;
         }
 
+        chunk.SetUpdate();
+
         Vector3[] newPoints = {
             (quad[0] + quad[1]) * 0.5d,
             (quad[1] + quad[2]) * 0.5d,
@@ -67,10 +69,6 @@ public class DynamicQuad
 
     public int Construct(int[] indices, List<Vector3> vertices, List<int> triangles)
     {
-        //GD.Print(depth);
-        //GD.Print(isLeaf);
-        //GD.Print("+++");
-
         if(isLeaf)
         {
             MeshHelper.AddQuad(triangles, indices);
@@ -129,6 +127,8 @@ public class DynamicQuad
                 {
                     parent.Update(maxDepth, splitDistance, target);
                 }
+
+                chunk.SetUpdate();
             }
         }
 
@@ -136,12 +136,6 @@ public class DynamicQuad
         {
             child.Update(maxDepth, splitDistance, target);
         }
-
-        /*
-        A way to optimise this would be by recording whether the chunk actually gets updated at all.
-        If not, we can just preserve the mesh. Since on a planet scale this should apply to most chunks on most frames,
-        this should vastly improve performance.
-        */
     }
 
     public override string ToString()

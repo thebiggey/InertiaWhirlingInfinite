@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="6_y8dl8"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_lyocy"]
 
-[sub_resource type="Resource" id="Resource_s780b"]
+[sub_resource type="Resource" id="Resource_qbqej"]
 script = ExtResource("6_y8dl8")
 semiMajorAxis = 4.97596
 eccentricity = 0.0936124
@@ -62,7 +62,6 @@ script = ExtResource("5_ke0jo")
 [node name="Terrain" type="Node3D" parent="Environment/system/body/planetarybody" node_paths=PackedStringArray("dynamicTarget")]
 script = ExtResource("6_oj2na")
 terrainSettings = ExtResource("7_lyocy")
-autoUpdate = true
 constructMode = 0
 chunkCount = 6
 dynamicTarget = NodePath("../../../../tester")
@@ -78,7 +77,7 @@ splitDistance = 6.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.447967, 0.290944, -5.12067)
 script = ExtResource("3_sijd6")
 planetarySystem = NodePath("../..")
-orbit = SubResource("Resource_s780b")
+orbit = SubResource("Resource_qbqej")
 setVelocity = Vector3(15, 0, 0)
 update = false
 
@@ -88,7 +87,7 @@ update = false
 mesh = SubResource("TorusMesh_sny0y")
 
 [node name="tester" type="Node3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93307, -2.05442, 105.335)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93307, -2.05442, 108.455)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/tester"]
 transform = Transform3D(3.16313, 0, 0, 0, 3.16313, 0, 0, 0, 3.16313, 0, 0, 0)
