@@ -25,4 +25,26 @@ public class MeshHelper
         tris.Add(quad[3]);
         tris.Add(quad[2]);
     }
+
+    public static void PrintFull(Vector3[] vertices, int[] triangles)
+    {
+        GD.Print("Vertices: ");
+        foreach(Vector3 v in vertices)
+        {
+            GD.Print(v);
+        }
+
+        GD.Print("triangles: ");
+        foreach(int i in triangles)
+        {
+            GD.Print(i);
+        }
+
+        GD.Print("----------------------------------");
+    }
+
+    public static void PrintFull(List<Vector3> vertices, List<int> triangles)
+    {
+        PrintFull(vertices.ToArray(), triangles.ToArray());
+    }
 }

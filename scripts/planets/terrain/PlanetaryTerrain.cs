@@ -63,7 +63,7 @@ public partial class PlanetaryTerrain : Node3D
     };
 
     // This array stores the indices for each face. These indices refer to the base vertex array above
-    // The faces are indexed by a counter-clockwise order:
+    // The faces are indexed in a counter-clockwise order:
     //
     //   3------2
     //   |      |
@@ -86,7 +86,6 @@ public partial class PlanetaryTerrain : Node3D
         if(chunkCount <= 0) return;
 
         Node3D terrainParent = GetChild<Node3D>(0);
-
         NodeHelper.RemoveChildren(terrainParent);
 
         TerrainChunk[,,] chunks = new TerrainChunk[6, chunkCount, chunkCount];
@@ -137,6 +136,8 @@ public partial class PlanetaryTerrain : Node3D
         }
 
         terrainChunks = new CubeSurfaceArray<TerrainChunk>(chunks);
+
+        GenerateDynamic();
     }
 
     private void ConstructUniform()
@@ -174,6 +175,40 @@ public partial class PlanetaryTerrain : Node3D
         }
     }
 
+    private void GenerateDynamic()
+    {
+        Vector3 target = dynamicTarget.GlobalPosition - GlobalPosition;
+
+        for(int f = 0; f < 6; f++)
+        {
+            for(int i = 0; i < chunkCount; i++)
+            {
+                for(int j = 0; j < chunkCount; j++)
+                {
+                    terrainChunks.Get(f, i, j).GenerateTree(target, maxDepth, splitDistance);
+                }
+            }
+        }
+    }
+
+    private void ConstructDynamicOptimised()
+    {
+        Vector3 target = dynamicTarget.GlobalPosition - GlobalPosition;
+
+        for(int f = 0; f < 6; f++)
+        {
+            for(int i = 0; i < chunkCount; i++)
+            {
+                for(int j = 0; j < chunkCount; j++)
+                {
+                    terrainChunks.Get(f, i, j).UpdateTree(maxDepth, target, splitDistance);
+
+                    terrainChunks.Get(f, i, j).ConstructMesh(target, Mathf.DegToRad(cullingAngle));
+                }
+            }
+        }
+    }
+
     private void ConstructDebug()
     {
         for(int f = 0; f < 6; f++)
@@ -202,12 +237,20 @@ public partial class PlanetaryTerrain : Node3D
             return;
 
             case ConstructMode.Dynamic:
-                ConstructDynamic();
+                ConstructDynamicOptimised();
             return;
 
             case ConstructMode.Debug:
                 ConstructDebug();
             return;
+        }
+    }
+
+    public override void _Ready()
+    {
+        if(!Engine.IsEditorHint())
+        {
+            Initialise();
         }
     }
 
@@ -220,7 +263,7 @@ public partial class PlanetaryTerrain : Node3D
             Initialise();
         }
 
-        if(update || autoUpdate)
+        if(!Engine.IsEditorHint() || update || autoUpdate)
         {
             update = false;
 

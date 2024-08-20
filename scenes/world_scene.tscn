@@ -8,9 +8,9 @@
 [ext_resource type="Script" path="res://scripts/world/nodes/planetary/solid/SolidBody.cs" id="5_ke0jo"]
 [ext_resource type="Script" path="res://scripts/planets/terrain/PlanetaryTerrain.cs" id="6_oj2na"]
 [ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="6_y8dl8"]
-[ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_7atar"]
+[ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_lyocy"]
 
-[sub_resource type="Resource" id="Resource_voqvq"]
+[sub_resource type="Resource" id="Resource_s780b"]
 script = ExtResource("6_y8dl8")
 semiMajorAxis = 4.97596
 eccentricity = 0.0936124
@@ -61,14 +61,14 @@ script = ExtResource("5_ke0jo")
 
 [node name="Terrain" type="Node3D" parent="Environment/system/body/planetarybody" node_paths=PackedStringArray("dynamicTarget")]
 script = ExtResource("6_oj2na")
-terrainSettings = ExtResource("7_7atar")
+terrainSettings = ExtResource("7_lyocy")
+autoUpdate = true
 constructMode = 0
-chunkCount = 4
-chunkResolution = 10
+chunkCount = 6
 dynamicTarget = NodePath("../../../../tester")
-cullingAngle = 95.0
-maxDepth = 4
-splitDistance = 16.375
+cullingAngle = 90.0
+maxDepth = 6
+splitDistance = 6.0
 
 [node name="chunks" type="Node3D" parent="Environment/system/body/planetarybody/Terrain"]
 
@@ -78,7 +78,7 @@ splitDistance = 16.375
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.447967, 0.290944, -5.12067)
 script = ExtResource("3_sijd6")
 planetarySystem = NodePath("../..")
-orbit = SubResource("Resource_voqvq")
+orbit = SubResource("Resource_s780b")
 setVelocity = Vector3(15, 0, 0)
 update = false
 
@@ -88,7 +88,8 @@ update = false
 mesh = SubResource("TorusMesh_sny0y")
 
 [node name="tester" type="Node3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.3805, 12.6561, 10.7599)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93307, -2.05442, 105.335)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/tester"]
+transform = Transform3D(3.16313, 0, 0, 0, 3.16313, 0, 0, 0, 3.16313, 0, 0, 0)
 mesh = SubResource("SphereMesh_b42fv")

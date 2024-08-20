@@ -5,11 +5,12 @@ using Godot;
 [Tool]
 public partial class TerrainChunk : MeshInstance3D
 {
+    (int, int, int) index;
     [Export] public TerrainSettings terrainSettings;
 
     [Export] Vector3[] quad;
 
-    (int, int, int) index;
+    DynamicQuad rootQuad;
 
     Noise noise;
 
@@ -135,6 +136,55 @@ public partial class TerrainChunk : MeshInstance3D
 
         ArrayMesh arrayMesh = new ArrayMesh();
 
+        Godot.Collections.Array arrays = new Godot.Collections.Array();
+        arrays.Resize((int)Mesh.ArrayType.Max);
+
+        arrays[(int)ArrayMesh.ArrayType.Vertex] = vertices.ToArray();
+        arrays[(int)ArrayMesh.ArrayType.Index] = triangles.ToArray();
+
+        arrayMesh.AddSurfaceFromArrays(ArrayMesh.PrimitiveType.Triangles, arrays);
+
+        this.Mesh = arrayMesh;
+    }
+
+    public void GenerateTree(Vector3 target, int maxDepth, double splitDistance)
+    {
+        rootQuad = new DynamicQuad(quad, 0, this, null);
+
+        rootQuad.Generate(maxDepth, splitDistance, target);
+    }
+
+    public void UpdateTree(int maxDepth, Vector3 target, double splitDistance)
+    {
+        rootQuad.Update(maxDepth, splitDistance, target);
+    }
+
+    public void ConstructMesh(Vector3 target, double cullingAngle)
+    {
+        Vector3 centre = (quad[0] + quad[2]) * 0.5d;
+
+        // This is a basic way to cull the chunk if it isn't visible by the player
+        if(nMath.CosineTheoremAngle(target.Length(), centre.Length(), (target - centre).Length()) > cullingAngle)
+        {
+            this.Mesh = null;
+            return;
+        }
+
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
+
+        vertices.AddRange(quad);
+
+        int[] rootIndices = { 0, 1, 2, 3 };
+
+        rootQuad.Construct(rootIndices, vertices, triangles);
+
+        for(int i = 0; i < vertices.Count; i++)
+        {
+            vertices[i] = vertices[i].Normalized() * terrainSettings.radius;
+        }
+
+        ArrayMesh arrayMesh = new ArrayMesh();
         Godot.Collections.Array arrays = new Godot.Collections.Array();
         arrays.Resize((int)Mesh.ArrayType.Max);
 

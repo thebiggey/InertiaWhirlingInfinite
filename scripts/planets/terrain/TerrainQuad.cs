@@ -30,7 +30,7 @@ public struct TerrainQuad
 
         Vector3 centre = (points[0] + points[2]) * 0.5d;
 
-        if(depth > maxDepth || target.DistanceTo(centre.Normalized() * radius) > splitDistance * sideLength)
+        if(depth > maxDepth || target.DistanceTo(centre.Normalized() * radius) > splitDistance * sideLength * radius)
         {
             MeshHelper.AddQuad(triangles, quad);
             return;
