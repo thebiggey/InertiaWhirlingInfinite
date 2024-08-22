@@ -1,16 +1,16 @@
-[gd_scene load_steps=13 format=3 uid="uid://cf8ex730tep7q"]
+[gd_scene load_steps=14 format=3 uid="uid://cf8ex730tep7q"]
 
 [ext_resource type="Script" path="res://scripts/world/Clock.cs" id="1_i3lce"]
 [ext_resource type="Script" path="res://scripts/world/nodes/systems/PlanetarySystem.cs" id="2_amnnx"]
 [ext_resource type="Script" path="res://scripts/world/WorldManager.cs" id="2_yhxhm"]
-[ext_resource type="Script" path="res://scripts/debug/DebugCamera.cs" id="3_jksud"]
+[ext_resource type="Script" path="res://scripts/world/GravityManager.cs" id="3_kbqq0"]
 [ext_resource type="Script" path="res://scripts/world/nodes/systems/OrbitalNode.cs" id="3_sijd6"]
 [ext_resource type="Script" path="res://scripts/world/nodes/planetary/solid/SolidBody.cs" id="5_ke0jo"]
 [ext_resource type="Script" path="res://scripts/planets/terrain/PlanetaryTerrain.cs" id="6_oj2na"]
 [ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="6_y8dl8"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_lyocy"]
 
-[sub_resource type="Resource" id="Resource_qbqej"]
+[sub_resource type="Resource" id="Resource_2qgcs"]
 script = ExtResource("6_y8dl8")
 semiMajorAxis = 4.97596
 eccentricity = 0.0936124
@@ -23,6 +23,8 @@ type = 0
 
 [sub_resource type="SphereMesh" id="SphereMesh_b42fv"]
 
+[sub_resource type="Environment" id="Environment_7djap"]
+
 [node name="WorldScene" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -33,22 +35,13 @@ transform = Transform3D(1, 0, 0, 0, 6.12323e-17, 1, 0, -1, 6.12323e-17, 0, 132.6
 [node name="Clock" type="Node" parent="Council"]
 script = ExtResource("1_i3lce")
 
-[node name="WorldManager" type="Node" parent="Council" node_paths=PackedStringArray("_player")]
+[node name="WorldManager" type="Node" parent="Council"]
 script = ExtResource("2_yhxhm")
-_player = NodePath("../../Environment/DebugCamNode/body/DebugCamera")
+
+[node name="GravityManager" type="Node" parent="Council"]
+script = ExtResource("3_kbqq0")
 
 [node name="Environment" type="Node" parent="."]
-
-[node name="DebugCamNode" type="Node3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.99333, 0, 0)
-
-[node name="body" type="Node3D" parent="Environment/DebugCamNode"]
-
-[node name="DebugCamera" type="Node3D" parent="Environment/DebugCamNode/body"]
-script = ExtResource("3_jksud")
-
-[node name="Camera3D" type="Camera3D" parent="Environment/DebugCamNode/body/DebugCamera"]
-current = true
 
 [node name="system" type="Node3D" parent="Environment"]
 script = ExtResource("2_amnnx")
@@ -63,7 +56,7 @@ script = ExtResource("5_ke0jo")
 script = ExtResource("6_oj2na")
 terrainSettings = ExtResource("7_lyocy")
 constructMode = 0
-chunkCount = 6
+chunkCount = 5
 dynamicTarget = NodePath("../../../../tester")
 cullingAngle = 90.0
 maxDepth = 6
@@ -77,7 +70,7 @@ splitDistance = 6.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.447967, 0.290944, -5.12067)
 script = ExtResource("3_sijd6")
 planetarySystem = NodePath("../..")
-orbit = SubResource("Resource_qbqej")
+orbit = SubResource("Resource_2qgcs")
 setVelocity = Vector3(15, 0, 0)
 update = false
 
@@ -87,8 +80,13 @@ update = false
 mesh = SubResource("TorusMesh_sny0y")
 
 [node name="tester" type="Node3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93307, -2.05442, 108.455)
+transform = Transform3D(0.682879, 0, 0.730532, 0, 1, 0, -0.730532, 0, 0.682879, 97.6247, -2.05442, 9.11538)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/tester"]
 transform = Transform3D(3.16313, 0, 0, 0, 3.16313, 0, 0, 0, 3.16313, 0, 0, 0)
 mesh = SubResource("SphereMesh_b42fv")
+
+[node name="Camera3D" type="Camera3D" parent="Environment/tester"]
+environment = SubResource("Environment_7djap")
+current = true

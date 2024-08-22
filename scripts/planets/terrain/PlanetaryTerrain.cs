@@ -88,7 +88,7 @@ public partial class PlanetaryTerrain : Node3D
         Node3D terrainParent = GetChild<Node3D>(0);
         NodeHelper.RemoveChildren(terrainParent);
 
-        TerrainChunk[,,] chunks = new TerrainChunk[6, chunkCount, chunkCount];
+        terrainChunks = new CubeSurfaceArray<TerrainChunk>(chunkCount);
 
         Noise noise = new Noise(seed);
 
@@ -118,7 +118,6 @@ public partial class PlanetaryTerrain : Node3D
 
                     Vector3[] quad = new Vector3[4];
 
-                    // I'll have to check if the order is right
                     quad[0] = faceQuad[0] + dirX * tx + dirY * ty;
                     quad[1] = quad[0] + dirX * step;
                     quad[2] = quad[1] + dirY * step;
@@ -130,12 +129,10 @@ public partial class PlanetaryTerrain : Node3D
                     newchunk.Initialise(terrainSettings, (f, i, j), quad, noise);
 
                     terrainParent.AddChild(newchunk);
-                    chunks[f, i, j] = newchunk;
+                    terrainChunks.Set(newchunk, f, i ,j);
                 }
             }
         }
-
-        terrainChunks = new CubeSurfaceArray<TerrainChunk>(chunks);
 
         GenerateDynamic();
 
@@ -231,7 +228,7 @@ public partial class PlanetaryTerrain : Node3D
 
     private void Construct()
     {
-        if(chunkCount != terrainChunks.height)
+        if(chunkCount != terrainChunks.Size)
         {
             Initialise();
         }

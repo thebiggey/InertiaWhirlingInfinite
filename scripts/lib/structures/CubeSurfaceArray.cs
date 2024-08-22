@@ -15,61 +15,33 @@ public struct CubeSurfaceArray<T>
         0, 5, 1, 4 // right,   5
     };
 
-    T[,,] data;
+    T[] data;
+    int size;
+    int sizeSq;
 
-    public int height => data.GetLength(2);
-    public int width => data.GetLength(1);
+    public int Size => size;
 
-
-    public CubeSurfaceArray(int _height, int _width)
+    public CubeSurfaceArray(int size)
     {
-        this.data = new T[6, _width, _height];
+        this.data = new T[6 * size * size];
+        this.size = size;
+        this.sizeSq = size * size;
     }
 
-    public CubeSurfaceArray(T[,,] data)
+    public CubeSurfaceArray(T[] data)
     {
         this.data = data;
-    }
-
-    public enum Face { Front, Back, Top, Bottom, Left, Right }
-
-    public T Get(Face face, int x, int y)
-    {
-        return data[(int)face, x, y];
+        this.size = data.Length;
+        this.sizeSq = this.size * this.size;
     }
 
     public T Get(int f, int x, int y)
     {
-        return data[f, x, y];
+        return data[f * sizeSq + x * size + y];
     }
 
-    public T GetUnclamped(Face face, int x, int y)
+    public void Set(T val, int f, int x, int y)
     {
-        return GetUnclamped((int)face, x, y);
-    }
-
-    public T GetUnclamped(int f, int x, int y)
-    {
-
-        if(x >= width)
-        {
-            return data[maps[f * 4 + 1], x - width, y];
-        }
-        else if(x < 0)
-        {
-            return data[maps[f * 4 + 3], x + width, y];
-        }
-        else if(y >= height)
-        {
-            return data[maps[f * 4 + 0], x, y - height];
-        }
-        else if(y < 0)
-        {
-            return data[maps[f * 4 + 2], x, y + height];
-        }
-        else
-        {
-            return data[f, x, y];
-        }
+        data[f * sizeSq + x * size + y] = val;
     }
 }
