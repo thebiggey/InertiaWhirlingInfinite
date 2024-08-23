@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://ddtss4sltvvsn"]
+
+[ext_resource type="Script" path="res://scripts/ui/trajectories/ellipses/Ellipse.cs" id="1_aefiy"]
+
+[resource]
+script = ExtResource("1_aefiy")
+centre = Vector3(0, 0, 0)
+a = 1.0
+b = 1.0
+aDir = Vector3(0, 0, -1)
+bDir = Vector3(1, 0, 0)

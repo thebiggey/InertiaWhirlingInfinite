@@ -163,9 +163,9 @@ public class nMath
     /// <param name="b"></param>
     /// <param name="theta"></param>
     /// <returns></returns>
-    public static Vector3 RotateVectorAround(Vector3 a, Vector3 b, float theta)
+    public static Vector3 RotateVectorAround(Vector3 a, Vector3 b, double theta)
     {
-        return a * Mathf.Cos(theta) + b.Cross(a) * Mathf.Sin(theta) + b * b.Dot(a) * (1 - Mathf.Cos(theta));
+        return a * Math.Cos(theta) + b.Cross(a) * Mathf.Sin(theta) + b * b.Dot(a) * (1 - Math.Cos(theta));
     }
 
     public static Vector3 GenerateNorthVector(Vector3 r)

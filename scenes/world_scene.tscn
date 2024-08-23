@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cf8ex730tep7q"]
+[gd_scene load_steps=17 format=3 uid="uid://cf8ex730tep7q"]
 
 [ext_resource type="Script" path="res://scripts/world/Clock.cs" id="1_i3lce"]
 [ext_resource type="Script" path="res://scripts/world/nodes/systems/PlanetarySystem.cs" id="2_amnnx"]
@@ -9,8 +9,10 @@
 [ext_resource type="Script" path="res://scripts/planets/terrain/PlanetaryTerrain.cs" id="6_oj2na"]
 [ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="6_y8dl8"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_lyocy"]
+[ext_resource type="Script" path="res://scripts/ui/trajectories/ellipses/EllipseRenderer.cs" id="10_cshqn"]
+[ext_resource type="Resource" uid="uid://ddtss4sltvvsn" path="res://scripts/ui/trajectories/ellipses/ellipsetest.tres" id="11_473ro"]
 
-[sub_resource type="Resource" id="Resource_2qgcs"]
+[sub_resource type="Resource" id="Resource_0oo1j"]
 script = ExtResource("6_y8dl8")
 semiMajorAxis = 4.97596
 eccentricity = 0.0936124
@@ -24,6 +26,18 @@ type = 0
 [sub_resource type="SphereMesh" id="SphereMesh_b42fv"]
 
 [sub_resource type="Environment" id="Environment_7djap"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_jm68f"]
+_surfaces = [{
+"aabb": AABB(-1.05981, -0.1, -1.0866, 2.1299, 0.20001, 2.1129),
+"format": 34359742465,
+"index_count": 162,
+"index_data": PackedByteArray(3, 0, 4, 0, 1, 0, 1, 0, 0, 0, 3, 0, 4, 0, 5, 0, 2, 0, 2, 0, 1, 0, 4, 0, 5, 0, 3, 0, 0, 0, 0, 0, 2, 0, 5, 0, 6, 0, 7, 0, 4, 0, 4, 0, 3, 0, 6, 0, 7, 0, 8, 0, 5, 0, 5, 0, 4, 0, 7, 0, 8, 0, 6, 0, 3, 0, 3, 0, 5, 0, 8, 0, 9, 0, 10, 0, 7, 0, 7, 0, 6, 0, 9, 0, 10, 0, 11, 0, 8, 0, 8, 0, 7, 0, 10, 0, 11, 0, 9, 0, 6, 0, 6, 0, 8, 0, 11, 0, 12, 0, 13, 0, 10, 0, 10, 0, 9, 0, 12, 0, 13, 0, 14, 0, 11, 0, 11, 0, 10, 0, 13, 0, 14, 0, 12, 0, 9, 0, 9, 0, 11, 0, 14, 0, 15, 0, 16, 0, 13, 0, 13, 0, 12, 0, 15, 0, 16, 0, 17, 0, 14, 0, 14, 0, 13, 0, 16, 0, 17, 0, 15, 0, 12, 0, 12, 0, 14, 0, 17, 0, 18, 0, 19, 0, 16, 0, 16, 0, 15, 0, 18, 0, 19, 0, 20, 0, 17, 0, 17, 0, 16, 0, 19, 0, 20, 0, 18, 0, 15, 0, 15, 0, 17, 0, 20, 0, 21, 0, 22, 0, 19, 0, 19, 0, 18, 0, 21, 0, 22, 0, 23, 0, 20, 0, 20, 0, 19, 0, 22, 0, 23, 0, 21, 0, 18, 0, 18, 0, 20, 0, 23, 0, 24, 0, 25, 0, 22, 0, 22, 0, 21, 0, 24, 0, 25, 0, 26, 0, 23, 0, 23, 0, 22, 0, 25, 0, 26, 0, 24, 0, 21, 0, 21, 0, 23, 0, 26, 0, 27, 0, 28, 0, 25, 0, 25, 0, 24, 0, 27, 0, 28, 0, 29, 0, 26, 0, 26, 0, 25, 0, 28, 0, 29, 0, 27, 0, 24, 0, 24, 0, 26, 0, 29, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 30,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 205, 204, 204, 61, 0, 0, 128, 191, 64, 165, 242, 188, 205, 204, 76, 189, 178, 42, 107, 191, 64, 165, 242, 60, 205, 204, 76, 189, 167, 106, 138, 191, 187, 141, 36, 63, 205, 204, 204, 61, 125, 27, 68, 191, 135, 90, 17, 63, 205, 204, 76, 189, 178, 5, 57, 191, 238, 192, 55, 63, 205, 204, 76, 189, 72, 49, 79, 191, 92, 28, 124, 63, 205, 204, 204, 189, 212, 208, 49, 190, 220, 248, 136, 63, 205, 204, 76, 61, 156, 106, 34, 190, 0, 71, 102, 63, 205, 204, 76, 61, 12, 55, 65, 190, 215, 179, 93, 63, 205, 204, 204, 189, 0, 0, 0, 63, 9, 244, 107, 63, 205, 204, 76, 61, 192, 251, 16, 63, 165, 115, 79, 63, 205, 204, 76, 61, 128, 8, 222, 62, 68, 29, 175, 62, 205, 204, 204, 189, 178, 143, 112, 63, 68, 29, 175, 62, 205, 204, 76, 61, 164, 93, 131, 63, 68, 29, 175, 62, 205, 204, 76, 61, 29, 100, 90, 63, 68, 29, 175, 190, 205, 204, 204, 189, 178, 143, 112, 63, 168, 157, 203, 190, 205, 204, 76, 61, 185, 197, 128, 63, 224, 156, 146, 190, 205, 204, 76, 61, 242, 147, 95, 63, 215, 179, 93, 191, 205, 204, 204, 189, 0, 0, 0, 63, 51, 137, 115, 191, 205, 204, 76, 61, 142, 217, 3, 63, 123, 222, 71, 191, 205, 204, 76, 61, 228, 76, 248, 62, 92, 28, 124, 191, 205, 204, 204, 61, 212, 208, 49, 190, 41, 233, 104, 191, 205, 204, 76, 189, 169, 121, 5, 190, 200, 167, 135, 191, 205, 204, 76, 189, 255, 39, 94, 190, 187, 141, 36, 191, 205, 204, 204, 61, 125, 27, 68, 191, 145, 248, 28, 191, 205, 204, 76, 189, 47, 70, 47, 191, 229, 34, 44, 191, 205, 204, 76, 189, 203, 240, 88, 191, 50, 49, 141, 165, 205, 204, 204, 61, 0, 0, 128, 191, 50, 49, 141, 165, 205, 204, 76, 189, 106, 212, 105, 191, 50, 49, 141, 165, 205, 204, 76, 189, 203, 21, 139, 191)
+}]
 
 [node name="WorldScene" type="Node3D"]
 
@@ -55,8 +69,9 @@ script = ExtResource("5_ke0jo")
 [node name="Terrain" type="Node3D" parent="Environment/system/body/planetarybody" node_paths=PackedStringArray("dynamicTarget")]
 script = ExtResource("6_oj2na")
 terrainSettings = ExtResource("7_lyocy")
-constructMode = 0
+constructMode = 1
 chunkCount = 5
+chunkResolution = 5
 dynamicTarget = NodePath("../../../../tester")
 cullingAngle = 90.0
 maxDepth = 6
@@ -70,7 +85,7 @@ splitDistance = 6.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.447967, 0.290944, -5.12067)
 script = ExtResource("3_sijd6")
 planetarySystem = NodePath("../..")
-orbit = SubResource("Resource_2qgcs")
+orbit = SubResource("Resource_0oo1j")
 setVelocity = Vector3(15, 0, 0)
 update = false
 
@@ -80,7 +95,7 @@ update = false
 mesh = SubResource("TorusMesh_sny0y")
 
 [node name="tester" type="Node3D" parent="Environment"]
-transform = Transform3D(0.682879, 0, 0.730532, 0, 1, 0, -0.730532, 0, 0.682879, 97.6247, -2.05442, 9.11538)
+transform = Transform3D(0.682879, 0, 0.730532, 0, 1, 0, -0.730532, 0, 0.682879, 97.6247, -2.05442, -82.0076)
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/tester"]
@@ -90,3 +105,9 @@ mesh = SubResource("SphereMesh_b42fv")
 [node name="Camera3D" type="Camera3D" parent="Environment/tester"]
 environment = SubResource("Environment_7djap")
 current = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment"]
+mesh = SubResource("ArrayMesh_jm68f")
+script = ExtResource("10_cshqn")
+ellipse = ExtResource("11_473ro")
+size = 0.1
