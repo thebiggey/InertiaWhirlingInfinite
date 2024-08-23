@@ -12,6 +12,11 @@ public partial class EllipseRenderer : LineRenderer
         this.ellipse = ellipse;
     }
 
+    public void SetEllipse(Orbit orbit)
+    {
+        SetEllipse(new Ellipse(orbit));
+    }
+
     public override void Update()
     {
         Vector3[] points = new Vector3[resolution];
@@ -24,5 +29,6 @@ public partial class EllipseRenderer : LineRenderer
         }
 
         SetPoints(points);
+        Construct();
     }
 }

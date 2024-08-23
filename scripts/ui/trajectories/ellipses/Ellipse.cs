@@ -30,8 +30,8 @@ public partial class Ellipse : Resource
 
     public Ellipse(Orbit orbit)
     {
-        this.aDir = orbit.LocalToWorldSpace(Vector2.Up);
-        this.bDir = orbit.LocalToWorldSpace(Vector2.Right);
+        this.aDir = orbit.LocalToWorldSpace(-Vector2.Right);
+        this.bDir = orbit.LocalToWorldSpace(Vector2.Up);
 
         this.centre = orbit.planetarySystem.GlobalPosition + (orbit.a * orbit.e * this.aDir);
         this.a = orbit.a;

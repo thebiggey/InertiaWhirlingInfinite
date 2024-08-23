@@ -15,7 +15,10 @@ public partial class LineRenderer : MeshInstance3D
 
     Vector3[] points;
 
-    public virtual void Update() { }
+    public virtual void Update()
+    {
+        Construct();
+    }
 
     public void SetPoints(Vector3[] points)
     {
@@ -27,7 +30,7 @@ public partial class LineRenderer : MeshInstance3D
         const double _tauOver3 = nMath.tau / 3;
         const double _2tauOver3 = (2 * nMath.tau) / 3;
 
-        int n = points.Length;new Vector3(1, 0, -1)
+        int n = points.Length;
 
         Vector3[] vertices = new Vector3[n * 3];
         int[] triangles = new int[(loop ? n : (n - 1)) * 18];
@@ -41,7 +44,8 @@ public partial class LineRenderer : MeshInstance3D
             Vector3 axis = dir.Cross(Vector3.Forward);
             if(axis == Vector3.Zero)
                 axis = dir.Cross(Vector3.Right);
-            else if(axis.Y < 0)
+
+            if(axis.Y < 0)
                 axis *= -1;
 
             axis = axis.Normalized() * size;
@@ -106,7 +110,6 @@ public partial class LineRenderer : MeshInstance3D
             update = false;
 
             Update();
-            Construct();
         }
     }
 

@@ -116,9 +116,9 @@ public partial class Orbit : Resource
 		this.ZbyY = (cosI * cosOmega * cosW - sinOmega * sinW);
 	}
 
-	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian, bool relative = true) : this(planetarySystem, cartesian, out _, relative) {  }
+	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian, bool relative = true) : this(planetarySystem, cartesian, out _) {  }
 
-	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian, out double trueAnomaly, bool relative = true)
+	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian, out double trueAnomaly)
 	{
 		this.planetarySystem = planetarySystem;
 
@@ -128,11 +128,6 @@ public partial class Orbit : Resource
 		{
 			const double velocityEpsilon = 0.001d;
 			cartesian.velocity += cartesian.position.Cross(nMath.GenerateNorthVector(cartesian.position)).Normalized() * velocityEpsilon;
-		}
-
-		if(!relative)
-		{
-			cartesian -= planetarySystem._StateVector;
 		}
 
 		// adjust position and velocity vectors to reference frame. This is a bad way to impliment this, but I can't be fucked to figure out the proper math
@@ -290,7 +285,7 @@ public partial class Orbit : Resource
 		}
 	}
 
-	private const int anomalyBound = 8;
+	private const int anomalyBound = 7;
 
 	private double ComputeEccentricAnomaly(double M, int bound)
 	{

@@ -4,51 +4,43 @@ using Godot;
 [Tool]
 public partial class OrbitalNode : WorldNode
 {
-    [Export] PlanetarySystem planetarySystem
-    {
-        get {
-            return _planetarySystem;
-        }
-        set {
-            orbit = new Orbit(value, new StateVector(Position, setVelocity));
-            _planetarySystem = value;
-        }
-    }
-
-    private PlanetarySystem _planetarySystem;
-
     [Export] Orbit orbit;
-    [ExportGroup("Debug")]
-    [Export] bool printStateVector = false;
-    [Export] Vector3 setVelocity;
-    [Export] bool updateOrbit = false;
-    [ExportGroup("")]
 
-    StateVector stateVector;
+    [ExportGroup("References")]
+    [Export] PlanetarySystem system;
+    [Export] EllipseRenderer ellipseRenderer;
 
-    public StateVector _StateVector {
-        get {
-            if(orbit == null) return StateVector.Zero;
-            else return stateVector;
-        }
-    }
+    [ExportGroup("Controls")]
+    [Export] bool update = false;
+    [Export] bool autoUpdate = false;
+    [Export] bool setOrbit = false;
+    [Export] Vector3 setVelocity = Vector3.Zero;
+    [Export] bool printVelocity = false;
 
-    internal override void Update(double delta)
+    public override void _PhysicsProcess(double delta)
     {
-        //Debug
-        if(updateOrbit)
+        if(setOrbit)
         {
-            updateOrbit = false;
+            setOrbit = false;
 
-            orbit = new Orbit(planetarySystem, new StateVector(Position, setVelocity));
+            orbit = new Orbit(system, new StateVector(Position, setVelocity));
+
+            ellipseRenderer.SetEllipse(orbit);
+            ellipseRenderer.Update();
         }
 
-        if(orbit == null) return;
+        if(update || autoUpdate)
+        {
+            update = false;
 
-        stateVector = orbit.GetStateVector(Clock.t);
-        Position = _StateVector.position;
+            StateVector stateVector = orbit.GetStateVector(Clock.t);
+            Position = stateVector.position;
 
-        if(printStateVector)
-            GD.Print($"{Name}: {stateVector}");
+            if(printVelocity)
+            {
+                GD.Print($"Velocity: {stateVector.velocity}");
+                GD.Print($"Speed: {stateVector.velocity.Length()}");
+            }
+        }
     }
 }
