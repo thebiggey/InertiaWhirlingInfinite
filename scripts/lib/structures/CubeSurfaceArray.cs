@@ -20,6 +20,7 @@ public struct CubeSurfaceArray<T>
     int sizeSq;
 
     public int Size => size;
+    public int totalSize => 6 * sizeSq;
 
     public CubeSurfaceArray(int size)
     {

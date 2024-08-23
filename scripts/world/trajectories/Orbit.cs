@@ -15,20 +15,6 @@ public partial class Orbit : Resource
 	enum Type { Elliptical, Hyperbolic }
 	[Export] Type type = Type.Elliptical;
 
-	public double a => semiMajorAxis;
-	public double e => eccentricity;
-	public double i => inclination;
-	public double o => ascendingNodeLongitude;
-	public double w => argumentOfPeriapsis;
-
-	double mu => planetarySystem.mu;
-
-	double n;
-
-	public double T => nMath.tau / n;
-
-	public bool isElliptical => type == Type.Elliptical;
-
 	// The multipliers for the conversion from local to world space are cached.
 	// This increases memory usage, but also improves the performance of getting the state vector.
 	// Since getting the state vector is something we have to do dozens of times each frame, this should be worth it.
@@ -39,33 +25,39 @@ public partial class Orbit : Resource
 	private double ZbyX;
 	private double ZbyY;
 
+	double n;
 
-	/// <summary>
-	/// Returns the height of the periapsis, the lowest point in the orbit.
-	/// </summary>
+	public double a => semiMajorAxis;
+	public double e => eccentricity;
+	public double i => inclination;
+	public double o => ascendingNodeLongitude;
+	public double w => argumentOfPeriapsis;
+
+	public double b => a * axisRatio;
+
+	public double axisRatio {
+		get {
+			if(isElliptical)
+				return Math.Sqrt(1 - e * e);
+			return Math.Sqrt(e * e - 1);
+		}
+	}
+
+	double mu => planetarySystem.mu;
+
+	public double T => nMath.tau / n;
+
+	public bool isElliptical => type == Type.Elliptical;
+
 	public double Periapsis {
 		get {
 			return a * (1 - e);
 		}
 	}
 
-	/// <summary>
-	/// Returns the height of the apoapsis, the highest point in thr orbit. Negative if the orbit is hyperbolic, and thus loses this interpretation.
-	/// </summary>
 	public double Apoapsis {
 		get {
 			return a * (1 + e);
-		}
-	}
-
-	/// <summary>
-	/// Returns the ratio between the semi-minor and semi-major axes (b / a).
-	/// </summary>
-	public double axisRatio {
-		get {
-			if(isElliptical)
-				return Math.Sqrt(1 - e * e);
-			return Math.Sqrt(e * e - 1);
 		}
 	}
 
@@ -298,11 +290,6 @@ public partial class Orbit : Resource
 		}
 	}
 
-
-	/// <summary>	        // This rotates the values
-	/// Default iteration bound for approximating the eccentric and hyperbolic anomalies.
-	/// The approximation converges very quickly, so this bound computes the value to well within floating point error.
-	/// </summary>
 	private const int anomalyBound = 8;
 
 	private double ComputeEccentricAnomaly(double M, int bound)
@@ -329,12 +316,7 @@ public partial class Orbit : Resource
 		return H;
 	}
 
-	/// <summary>
-	/// Converts a vector from the orbit's local space to world space.
-	/// </summary>
-	/// <param name="v">The vector to convert. The method ignores this vector's y-value, since it must lie in the orbital plane.</param>
-	/// <returns></returns>
-	private Vector3 LocalToWorldSpace(Vector2 v)
+	public Vector3 LocalToWorldSpace(Vector2 v)
 	{
 		double x = v.X * XbyX + v.Y * XbyY;
 		double y = v.X * YbyX + v.Y * YbyY;
@@ -345,15 +327,11 @@ public partial class Orbit : Resource
 
 	private StateVector EllipticalStateVector(double E, double v)
 	{
-		double r = a * (1 - (e * Math.Cos(E)));
-
+		double r = a * (1 - e * Math.Cos(E));
 		Vector2 localPosition = new Vector2(Math.Cos(v), Math.Sin(v));
 
-
 		double speed = Math.Sqrt(mu * ((2 / r) - (1 / a)));
-
 		Vector2 localVelocity = new Vector2(-Math.Sin(E), axisRatio * Math.Cos(E));
-
 
 		return new StateVector(r * LocalToWorldSpace(localPosition.Normalized()), -speed * LocalToWorldSpace(localVelocity.Normalized()));
 	}
@@ -361,24 +339,14 @@ public partial class Orbit : Resource
 	private StateVector HyperbolicStateVector(double H, double v)
 	{
 		double r = a * (1 - e * Math.Cosh(H));
-
 		Vector2 localPosition = new Vector2(Math.Cos(v), Math.Sin(v));
 
-
 		double speed = Math.Sqrt(mu * ((2 / r) - (1 / a)));
-
 		Vector2 localVelocity = new Vector2(-Math.Sinh(H), axisRatio * Math.Cosh(H));
-
 
 		return new StateVector(r * LocalToWorldSpace(localPosition.Normalized()), -speed * LocalToWorldSpace(localVelocity.Normalized()));
 	}
 
-	/// <summary>
-	/// Returns the state vector of the orbit given a point in time.
-	/// </summary>
-	/// <param name="t">The point in time</param>
-	/// <param name="bound">The accuracy to which to compute the eccentric anomaly</param>
-	/// <returns>The state vector (position and velocity)</returns>
 	public StateVector GetStateVector(double t, int bound = anomalyBound)
 	{
 		// Not sure why, but every angle seems to be flipped with the new cartesian implementation. There's probably a proper fix for this, but until it
@@ -403,11 +371,6 @@ public partial class Orbit : Resource
 		}
 	}
 
-	/// <summary>
-	/// Returns the state vector of the orbit given a true anomaly.
-	/// </summary>
-	/// <param name="v">The true anomaly</param>
-	/// <returns>The state vector (position and velocity)</returns>
 	public StateVector GetStateVectorFromTruenomaly(double v)
 	{
 		v *= -1;
@@ -425,11 +388,6 @@ public partial class Orbit : Resource
 		}
 	}
 
-	/// <summary>
-	/// Returns the state vector of the orbit given an eccentric anomaly.
-	/// </summary>
-	/// <param name="E">The eccentric anomaly (hyperbolic anomaly if the orbit is hyperbolic).</param>
-	/// <returns>The state vector relative to the parent system. In order to get the global state vector, add the parent's global state vector onto it.</returns>
 	public StateVector GetStateVectorFromEccentricAnomaly(double E)
 	{
 		E *= -1;
@@ -499,10 +457,6 @@ public partial class Orbit : Resource
 		return Math.Acos(-x / r); // hyperbola is flipped, therefore must use -x
 	}
 
-	/// <summary>
-	/// Returns the true anomaly for which the orbit exits the system's SOI. If it doesn't exit the SOI this returns NaN.
-	/// </summary>
-	/// <returns></returns>
 	public double SphereIntersection()
 	{
 		if(isElliptical) return EllipticalSphereIntersection();
