@@ -209,7 +209,7 @@ public partial class TerrainChunk : MeshInstance3D
 
         for(int i = 0; i < vertices.Count; i++)
         {
-            vertices[i] = vertices[i].Normalized() * terrainSettings.radius;
+            vertices[i] = terrainSettings.Evaluate(vertices[i].Normalized(), noise);
         }
 
         ArrayMesh arrayMesh = new ArrayMesh();

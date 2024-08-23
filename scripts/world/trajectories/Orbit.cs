@@ -116,7 +116,7 @@ public partial class Orbit : Resource
 		this.ZbyY = (cosI * cosOmega * cosW - sinOmega * sinW);
 	}
 
-	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian, bool relative = true) : this(planetarySystem, cartesian, out _) {  }
+	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian) : this(planetarySystem, cartesian, out _) {  }
 
 	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian, out double trueAnomaly)
 	{
@@ -229,6 +229,10 @@ public partial class Orbit : Resource
 		this.ZbyY = (cosI * cosOmega * cosW - sinOmega * sinW);
 	}
 
+	public void SetPlanetarySystem(PlanetarySystem planetarySystem)
+	{
+		this.planetarySystem = planetarySystem;
+	}
 
 	double EccentricAnomalyToTrueAnomaly(double E)
 	{
@@ -379,6 +383,7 @@ public partial class Orbit : Resource
 		else
 		{
 			double H = TrueAnomalyToHyperbolicAnomaly(v);
+
 			return HyperbolicStateVector(H, v);
 		}
 	}

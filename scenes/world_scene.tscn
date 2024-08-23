@@ -79,8 +79,10 @@ script = ExtResource("3_kbqq0")
 [node name="Environment" type="Node" parent="."]
 
 [node name="system" type="Node3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 347.838, 0, 290.064)
 script = ExtResource("2_amnnx")
 mass = 100000.0
+systemRadius = 1000.0
 update = false
 update = false
 
@@ -88,6 +90,7 @@ update = false
 
 [node name="planetarybody" type="Node3D" parent="Environment/system/body"]
 script = ExtResource("5_ke0jo")
+radius = 100.0
 
 [node name="Terrain" type="Node3D" parent="Environment/system/body/planetarybody" node_paths=PackedStringArray("dynamicTarget")]
 script = ExtResource("6_oj2na")

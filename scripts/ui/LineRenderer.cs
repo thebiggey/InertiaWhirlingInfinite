@@ -35,6 +35,8 @@ public partial class LineRenderer : MeshInstance3D
         Vector3[] vertices = new Vector3[n * 3];
         int[] triangles = new int[(loop ? n : (n - 1)) * 18];
 
+        Vector3 lastAxis = Vector3.Zero;
+
         for(int i = 0; i < n; i++)
         {
             Vector3 point = points[i] - (global ? GlobalPosition : Vector3.Zero);
@@ -45,7 +47,7 @@ public partial class LineRenderer : MeshInstance3D
             if(axis == Vector3.Zero)
                 axis = dir.Cross(Vector3.Right);
 
-            if(axis.Y < 0)
+            if(lastAxis != Vector3.Zero && axis.AngleTo(lastAxis) > nMath.pi)
                 axis *= -1;
 
             axis = axis.Normalized() * size;
@@ -54,6 +56,8 @@ public partial class LineRenderer : MeshInstance3D
             vertices[k] = point + axis;
             vertices[k + 1] = point + nMath.RotateVectorAround(axis, dir, _tauOver3);
             vertices[k + 2] = point + nMath.RotateVectorAround(axis, dir, _2tauOver3);
+
+            lastAxis = axis;
         }
 
         for(int i = 0; i < (n - 1); i++)

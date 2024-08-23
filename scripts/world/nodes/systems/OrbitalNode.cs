@@ -25,6 +25,8 @@ public partial class OrbitalNode : WorldNode
 
             orbit = new Orbit(system, new StateVector(Position, setVelocity));
 
+            if(ellipseRenderer == null) return;
+
             ellipseRenderer.SetEllipse(orbit);
             ellipseRenderer.Update();
         }
@@ -32,6 +34,10 @@ public partial class OrbitalNode : WorldNode
         if(update || autoUpdate)
         {
             update = false;
+
+            if(orbit == null) return;
+
+            orbit.SetPlanetarySystem(system);
 
             StateVector stateVector = orbit.GetStateVector(Clock.t);
             Position = stateVector.position;

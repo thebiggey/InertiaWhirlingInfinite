@@ -4,5 +4,5 @@ using Godot;
 [Tool]
 public partial class GravityManager : Node
 {
-    public static double G = 1.2d;
+    public static double G = 12d;
 }
