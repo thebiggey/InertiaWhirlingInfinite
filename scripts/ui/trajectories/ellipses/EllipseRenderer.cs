@@ -19,14 +19,7 @@ public partial class EllipseRenderer : LineRenderer
 
     public override void Update()
     {
-        Vector3[] points = new Vector3[resolution];
-
-        for(int i = 0; i < resolution; i++)
-        {
-            double theta = nMath.tau * (double)i / (double)(resolution - 1);
-
-            points[i] = ellipse.Evaluate(theta);
-        }
+        Vector3[] points = ellipse.Sample(resolution);
 
         SetPoints(points);
         Construct();

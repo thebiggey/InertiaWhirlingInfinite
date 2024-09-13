@@ -406,7 +406,7 @@ public partial class Orbit : Resource
 		}
 	}
 
-	// This function returns the true anomaly at which the orbit exits the SOI (NaN if the orbit doesn't exit the SOI)
+	// This function returns local x value at which the orbit exits the SOI (NaN if the orbit doesn't exit the SOI)
 	// Since the orbit's focal point must lie at the centre of the planetary system, we know that the orbital plane always perfectly bisects the SOI.
 	// Therefore we can treat both of these shapes as two-dimensional within the orbital plane.
 	// This function is the result of setting the 2D ellipse equation (rearranged for finding x) equal to the equation for the SOI, which is simply a circle with the system radius.
@@ -432,7 +432,7 @@ public partial class Orbit : Resource
 
 		double x = (((sqB * c) - Math.Sqrt(root)) / (sqA - sqB)); // this is the actual equation
 
-		return Mathf.Acos(x / r); // get true anomaly from x value and return
+		return Math.Acos(x / r); // calculates true anomaly from x and returns
 	}
 
 	// This is a version of the function above adjusted for the case of a hyperbolic orbit.
@@ -459,8 +459,7 @@ public partial class Orbit : Resource
 
 	public double SphereIntersection()
 	{
-		if(isElliptical) return EllipticalSphereIntersection();
-		else return HyperbolicSphereIntersection();
+		return isElliptical ? EllipticalSphereIntersection() : HyperbolicSphereIntersection();
 	}
 
 	public override string ToString()

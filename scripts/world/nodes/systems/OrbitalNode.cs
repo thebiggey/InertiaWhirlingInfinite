@@ -4,10 +4,12 @@ using Godot;
 [Tool]
 public partial class OrbitalNode : WorldNode
 {
-    [Export] Orbit orbit;
+    [ExportGroup("Parameters")]
+    [Export] public Orbit orbit;
+    [Export] public double startingT = 0;
 
     [ExportGroup("References")]
-    [Export] PlanetarySystem system;
+    [Export] public PlanetarySystem parentSystem;
     [Export] EllipseRenderer ellipseRenderer;
 
     [ExportGroup("Controls")]
@@ -17,13 +19,26 @@ public partial class OrbitalNode : WorldNode
     [Export] Vector3 setVelocity = Vector3.Zero;
     [Export] bool printVelocity = false;
 
+    public StateVector GetStateVector()
+    {
+        if(orbit == null)
+            return StateVector.Zero;
+
+        return orbit.GetStateVector(Clock.t + startingT);
+    }
+
+    internal override void OnWorldLoad()
+    {
+        orbit.SetPlanetarySystem(parentSystem);
+    }
+
     public override void _PhysicsProcess(double delta)
     {
         if(setOrbit)
         {
             setOrbit = false;
 
-            orbit = new Orbit(system, new StateVector(Position, setVelocity));
+            orbit = new Orbit(parentSystem, new StateVector(Position, setVelocity));
 
             if(ellipseRenderer == null) return;
 
@@ -31,21 +46,18 @@ public partial class OrbitalNode : WorldNode
             ellipseRenderer.Update();
         }
 
-        if(update || autoUpdate)
+        if(!Engine.IsEditorHint() || update || autoUpdate)
         {
             update = false;
 
-            if(orbit == null) return;
-
-            orbit.SetPlanetarySystem(system);
-
-            StateVector stateVector = orbit.GetStateVector(Clock.t);
+            StateVector stateVector = GetStateVector();
             Position = stateVector.position;
 
             if(printVelocity)
             {
                 GD.Print($"Velocity: {stateVector.velocity}");
                 GD.Print($"Speed: {stateVector.velocity.Length()}");
+                GD.Print($"--------------------");
             }
         }
     }

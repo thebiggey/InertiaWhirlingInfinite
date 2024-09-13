@@ -30,16 +30,40 @@ public partial class Ellipse : Resource
 
     public Ellipse(Orbit orbit)
     {
-        this.aDir = orbit.LocalToWorldSpace(-Vector2.Right);
-        this.bDir = orbit.LocalToWorldSpace(Vector2.Up);
+        if(!orbit.isElliptical)
+        {
+            GD.PrintErr("Cannot convert orbit to ellipse, as it is hyperbolic!");
+        }
+
+        this.aDir = orbit.LocalToWorldSpace(-Vector2.Right).Normalized();
+        this.bDir = orbit.LocalToWorldSpace(Vector2.Up).Normalized();
 
         this.centre = orbit.planetarySystem.GlobalPosition + (orbit.a * orbit.e * this.aDir);
         this.a = orbit.a;
         this.b = orbit.b;
     }
 
-    public Vector3 Evaluate(double theta)
+    public virtual Vector3 Evaluate(double theta)
     {
         return centre + a * Math.Cos(theta) * aDir + b * Math.Sin(theta) * bDir;
+    }
+
+    public Vector3[] Sample(int resolution)
+    {
+        Vector3[] points = new Vector3[resolution];
+
+        Sample(resolution, points, 0);
+
+        return points;
+    }
+
+    public void Sample(int resolution, Vector3[] arr, int k)
+    {
+        for(int i = 0; i < resolution; i++)
+        {
+            double theta = nMath.tau * (double)i / (double)(resolution - 1);
+
+            arr[i + k] = Evaluate(theta);
+        }
     }
 }

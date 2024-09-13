@@ -9,5 +9,22 @@ public partial class PlanetarySystem : OrbitalNode
 
     PlanetaryBody planetaryBody;
 
+    Node3D childrenContainer;
+
     public double mu => mass * GravityManager.G;
+
+    public bool isSunSystem => parentSystem == null;
+
+    internal override void OnWorldLoad()
+    {
+        if(orbit != null)
+            orbit.SetPlanetarySystem(parentSystem);
+
+        childrenContainer = GetChild<Node3D>(1);
+    }
+
+    public void AddWorldChild(Node node)
+    {
+        childrenContainer.AddChild(node);
+    }
 }
