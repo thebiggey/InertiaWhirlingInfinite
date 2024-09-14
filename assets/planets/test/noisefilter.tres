@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://l4vumae3w5at"]
 
-[ext_resource type="Script" path="res://scripts/planets/terrain/generation/noise/NoiseFilter.cs" id="1_nb7vf"]
+[ext_resource type="Script" path="res://scripts/world/planet/terrain/generation/noise/NoiseFilter.cs" id="1_nb7vf"]
 
 [resource]
 script = ExtResource("1_nb7vf")

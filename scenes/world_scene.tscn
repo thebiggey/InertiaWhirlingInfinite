@@ -1,16 +1,16 @@
 [gd_scene load_steps=22 format=3 uid="uid://cf8ex730tep7q"]
 
 [ext_resource type="Script" path="res://scripts/world/Clock.cs" id="1_i3lce"]
-[ext_resource type="Script" path="res://scripts/world/nodes/systems/PlanetarySystem.cs" id="2_amnnx"]
+[ext_resource type="Script" path="res://scripts/world/node/systems/PlanetarySystem.cs" id="2_amnnx"]
 [ext_resource type="Script" path="res://scripts/world/WorldManager.cs" id="2_yhxhm"]
 [ext_resource type="Script" path="res://scripts/world/GravityManager.cs" id="3_kbqq0"]
-[ext_resource type="Script" path="res://scripts/world/trajectories/TrajectoryManager.cs" id="4_pyipm"]
-[ext_resource type="Script" path="res://scripts/world/nodes/planetary/PlanetaryBody.cs" id="5_cr24l"]
+[ext_resource type="Script" path="res://scripts/world/trajectory/TrajectoryManager.cs" id="4_pyipm"]
+[ext_resource type="Script" path="res://scripts/world/node/planetary/PlanetaryBody.cs" id="5_cr24l"]
 [ext_resource type="Script" path="res://scripts/ui/trajectories/TrajectoryRenderer.cs" id="5_cu2xe"]
-[ext_resource type="Script" path="res://scripts/world/nodes/planetary/solid/SolidBody.cs" id="5_ke0jo"]
-[ext_resource type="Script" path="res://scripts/planets/terrain/PlanetaryTerrain.cs" id="6_oj2na"]
+[ext_resource type="Script" path="res://scripts/world/node/planetary/solid/SolidBody.cs" id="5_ke0jo"]
+[ext_resource type="Script" path="res://scripts/world/planet/terrain/PlanetaryTerrain.cs" id="6_oj2na"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_lyocy"]
-[ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="9_x8tbr"]
+[ext_resource type="Script" path="res://scripts/world/Orbit.cs" id="9_x8tbr"]
 [ext_resource type="Script" path="res://scripts/ui/trajectories/ellipses/EllipseRenderer.cs" id="10_cshqn"]
 [ext_resource type="Script" path="res://scripts/ui/trajectories/ellipses/Ellipse.cs" id="11_vwou0"]
 [ext_resource type="Script" path="res://scripts/tools/OrbitCamera.cs" id="12_mmhya"]
@@ -84,11 +84,11 @@ script = ExtResource("3_kbqq0")
 
 [node name="TrajectoryManager" type="Node" parent="Council" node_paths=PackedStringArray("target", "startSystem", "trajectoryRenderer")]
 script = ExtResource("4_pyipm")
-target = NodePath("../../Environment/sunsystem/children/planetsystem/children/TrajectoryTester")
 startVelocity = Vector3(0, 35, 0)
+update = true
+target = NodePath("../../Environment/sunsystem/children/planetsystem/children/TrajectoryTester")
 startSystem = NodePath("../../Environment/sunsystem/children/planetsystem")
 trajectoryRenderer = NodePath("../../Environment/TrajectoryRenderer")
-update = true
 
 [node name="Environment" type="Node" parent="."]
 

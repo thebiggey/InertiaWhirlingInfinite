@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://bmy7txjr4ylwx"]
 
-[ext_resource type="Script" path="res://scripts/world/trajectories/Orbit.cs" id="1_tpotj"]
+[ext_resource type="Script" path="res://scripts/world/Orbit.cs" id="1_tpotj"]
 
 [resource]
 script = ExtResource("1_tpotj")
