@@ -45,8 +45,6 @@ public partial class TrajectoryManager : Node
         int k = 0;
         while(!double.IsNaN(endT) && !orbit.planetarySystem.isSunSystem && k < 5)
         {
-            GD.Print($"{k}");
-
             PlanetarySystem system = orbit.planetarySystem;
             PlanetarySystem parent = system.parentSystem;
 
@@ -74,15 +72,20 @@ public partial class TrajectoryManager : Node
 
         while(t > section.duration)
         {
-            t -= section.duration;
+            lastT = Clock.t;
+            t = 0;
 
             trajectory.Skip();
             section = trajectory.Get(0);
 
             section.orbit.planetarySystem.AddWorldChild(target);
+
+            GD.Print("TRAJECTORY SKIP");
         }
 
-        target.Position = section.Evaluate(t).position;
+        StateVector sv = section.Evaluate(t);
+
+        target.Position = sv.position;
     }
 
     public override void _Ready()

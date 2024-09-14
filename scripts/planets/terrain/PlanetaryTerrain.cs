@@ -176,6 +176,8 @@ public partial class PlanetaryTerrain : Node3D
 
     private void GenerateDynamic()
     {
+        if(dynamicTarget == null) return;
+
         Vector3 target = dynamicTarget.GlobalPosition - GlobalPosition;
 
         for(int f = 0; f < 6; f++)
@@ -192,6 +194,8 @@ public partial class PlanetaryTerrain : Node3D
 
     private void ConstructDynamicOptimised(bool overrideUpdate = false)
     {
+        if(dynamicTarget == null) return;
+
         Vector3 target = dynamicTarget.GlobalPosition - GlobalPosition;
         double alpha = Mathf.DegToRad(cullingAngle);
 

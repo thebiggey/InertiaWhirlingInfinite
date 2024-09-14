@@ -25,7 +25,9 @@ public partial class Orbit : Resource
 	private double ZbyX;
 	private double ZbyY;
 
-	double n;
+	// I have no fucking idea why but if n isn't marked as export the objects start orbiting much faster
+	// the amount of pain this has caused me is unbelievable and i challenge the person responsible for this to a duel
+	[Export] double n;
 
 	public double a => semiMajorAxis;
 	public double e => eccentricity;
@@ -234,22 +236,22 @@ public partial class Orbit : Resource
 		this.planetarySystem = planetarySystem;
 	}
 
-	double EccentricAnomalyToTrueAnomaly(double E)
+	private double EccentricAnomalyToTrueAnomaly(double E)
 	{
 		return 2 * Math.Atan(Math.Sqrt((1 + e) / (1 - e)) * Math.Tan(E * 0.5d));
 	}
 
-	double TrueAnomalyToEccentricAnomaly(double v)
+	private double TrueAnomalyToEccentricAnomaly(double v)
 	{
 		return 2 * Math.Atan(Math.Sqrt((1 - e) / (1 + e)) * Math.Tan(v * 0.5d));
 	}
 
-	double HyperbolicAnomalyToTrueAnomaly(double H)
+	private double HyperbolicAnomalyToTrueAnomaly(double H)
 	{
 		return 2 * Math.Atan(Math.Sqrt((e + 1) / (e - 1)) * Math.Tanh(H * 0.5d));
 	}
 
-	public double TrueAnomalyToHyperbolicAnomaly(double v)
+	private double TrueAnomalyToHyperbolicAnomaly(double v)
 	{
 		return 2 * Math.Atanh(Math.Sqrt((e - 1) / (e + 1)) * Math.Tan(v * 0.5d));
 	}
@@ -406,7 +408,7 @@ public partial class Orbit : Resource
 		}
 	}
 
-	// This function returns local x value at which the orbit exits the SOI (NaN if the orbit doesn't exit the SOI)
+	// This function returns the true anomaly at which the orbit exits the SOI (NaN if the orbit doesn't exit the SOI)
 	// Since the orbit's focal point must lie at the centre of the planetary system, we know that the orbital plane always perfectly bisects the SOI.
 	// Therefore we can treat both of these shapes as two-dimensional within the orbital plane.
 	// This function is the result of setting the 2D ellipse equation (rearranged for finding x) equal to the equation for the SOI, which is simply a circle with the system radius.

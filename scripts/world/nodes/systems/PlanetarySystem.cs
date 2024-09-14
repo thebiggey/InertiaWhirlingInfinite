@@ -25,6 +25,6 @@ public partial class PlanetarySystem : OrbitalNode
 
     public void AddWorldChild(Node node)
     {
-        childrenContainer.AddChild(node);
+        NodeHelper.SetParent(node, this);
     }
 }
