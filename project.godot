@@ -14,6 +14,7 @@ config/name="InertiaWhirlingInfinite"
 run/main_scene="res://scenes/world_scene.tscn"
 config/features=PackedStringArray("4.3", "C#", "Double Precision", "Forward Plus")
 config/icon="res://icon.png"
+physics/common/physics_interpolation=false
 
 [dotnet]
 
