@@ -48,6 +48,11 @@ public partial class Ellipse : Resource
         return centre + a * Math.Cos(theta) * aDir + b * Math.Sin(theta) * bDir;
     }
 
+    public Vector3 ComputeNormal()
+    {
+        return aDir.Cross(bDir).Normalized();
+    }
+
     public Vector3[] Sample(int resolution)
     {
         Vector3[] points = new Vector3[resolution];

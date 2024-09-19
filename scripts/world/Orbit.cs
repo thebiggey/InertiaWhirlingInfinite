@@ -63,6 +63,12 @@ public partial class Orbit : Resource
 		}
 	}
 
+	public Vector3 Normal {
+		get {
+			return LocalToWorldSpace(Vector2.Right).Cross(LocalToWorldSpace(Vector2.Up)).Normalized();
+		}
+	}
+
 	public static readonly Vector3 referenceVector = new Vector3(0, 0, 1);
 
 	public Orbit()
@@ -406,6 +412,27 @@ public partial class Orbit : Resource
 
 			return HyperbolicStateVector(E, v);
 		}
+	}
+
+	// this is a reduced version of GetStateVector, which only returns the position
+	// this should be mainly used for orbit rendering, not for orbital mechanics
+	public Vector3 Sample(double v)
+	{
+		v *= -1;
+		double r;
+
+		if(isElliptical)
+		{
+			double E = TrueAnomalyToEccentricAnomaly(v);
+			r = a * (1 - e * Math.Cos(E));
+		}
+		else
+		{
+			double H = TrueAnomalyToHyperbolicAnomaly(v);
+			r = a * (1 - e * Math.Cosh(H));
+		}
+
+		return r * LocalToWorldSpace(new Vector2(Math.Cos(v), Math.Sin(v)));
 	}
 
 	// This function returns the true anomaly at which the orbit exits the SOI (NaN if the orbit doesn't exit the SOI)

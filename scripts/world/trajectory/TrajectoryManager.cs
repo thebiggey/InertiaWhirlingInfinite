@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+[Tool]
 public partial class TrajectoryManager : Node
 {
     [Export] Trajectory trajectory;
@@ -80,6 +81,8 @@ public partial class TrajectoryManager : Node
 
             section.orbit.planetarySystem.AddWorldChild(target);
 
+            trajectoryRenderer.Skip();
+
             GD.Print("TRAJECTORY SKIP");
         }
 
@@ -106,7 +109,7 @@ public partial class TrajectoryManager : Node
             init = true;
         }
 
-        if(update)
+        if(update && !Engine.IsEditorHint())
         {
             TraverseTrajectory();
         }

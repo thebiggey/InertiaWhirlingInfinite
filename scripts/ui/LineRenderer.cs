@@ -5,7 +5,8 @@ using Godot;
 public partial class LineRenderer : MeshInstance3D
 {
     [ExportGroup("Parameters")]
-    [Export] double size = 1;
+    [Export] internal double size = 1;
+    [Export] internal Vector3 normal = Vector3.Zero;
 
     [ExportGroup("Controls")]
     [Export] bool update = false;
@@ -43,14 +44,25 @@ public partial class LineRenderer : MeshInstance3D
             Vector3 dir = i < (n - 1) ? points[i + 1] - points[i] : points[0] - points[i];
             dir = dir.Normalized();
 
-            Vector3 axis = dir.Cross(Vector3.Forward);
-            if(axis == Vector3.Zero)
-                axis = dir.Cross(Vector3.Right);
+            Vector3 axis;
 
-            if(lastAxis != Vector3.Zero && axis.AngleTo(lastAxis) > nMath.pi)
-                axis *= -1;
+            if(normal == Vector3.Zero)
+            {
+                axis = dir.Cross(Vector3.Forward);
+                if(axis == Vector3.Zero)
+                    axis = dir.Cross(Vector3.Right);
 
-            axis = axis.Normalized() * size;
+                if(lastAxis != Vector3.Zero && axis.AngleTo(lastAxis) > nMath.pi)
+                    axis *= -1;
+
+                axis = axis.Normalized();
+            }
+            else
+            {
+                axis = normal;
+            }
+
+            axis *= size;
 
             int k = i * 3;
             vertices[k] = point + axis;

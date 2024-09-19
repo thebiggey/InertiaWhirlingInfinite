@@ -19,6 +19,7 @@ public partial class EllipseRenderer : LineRenderer
 
     public override void Update()
     {
+        this.normal = ellipse.ComputeNormal();
         Vector3[] points = ellipse.Sample(resolution);
 
         SetPoints(points);
