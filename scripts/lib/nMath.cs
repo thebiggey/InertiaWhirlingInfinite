@@ -86,6 +86,36 @@ public class nMath
         return - Mathf.Log(Mathf.Exp(-k * x) + Mathf.Exp(-k * y)) / k;
     }
 
+    public static double Max(double[] arr)
+    {
+        double max = double.NegativeInfinity;
+
+        for(int i = 0; i < arr.Length; i++)
+        {
+            if(arr[i] > max)
+            {
+                max = arr[i];
+            }
+        }
+
+        return max;
+    }
+
+    public static double Min(double[] arr)
+    {
+        double min = double.PositiveInfinity;
+
+        for(int i = 0; i < arr.Length; i++)
+        {
+            if(arr[i] < min)
+            {
+                min = arr[i];
+            }
+        }
+
+        return min;
+    }
+
     /// <summary>
     /// Returns the angle derived from the cosine theorem of 3 sides.
     /// </summary>

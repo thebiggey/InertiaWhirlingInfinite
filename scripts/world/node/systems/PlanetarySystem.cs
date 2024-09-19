@@ -4,10 +4,13 @@ using Godot;
 [Tool]
 public partial class PlanetarySystem : OrbitalNode
 {
+    [ExportGroup("Parameters")]
     [Export] double mass = 1000d;
     [Export] public double systemRadius = 100000d;
 
-    PlanetaryBody planetaryBody;
+    [ExportGroup("References")]
+    [Export] PlanetaryBody planetaryBody;
+    [Export] public Godot.Collections.Array<PlanetarySystem> childSystems;
 
     Node3D childrenContainer;
 
