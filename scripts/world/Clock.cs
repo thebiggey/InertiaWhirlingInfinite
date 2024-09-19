@@ -5,20 +5,19 @@ using Godot;
 public partial class Clock : Node
 {
     public static double globalTime;
-    [Export] double timeScaler {
-        get {
-            return timeScale;
-        }
-        set {
-            timeScale = value;
-        }
-    }
 
     public static double delta;
 
     public static double timeScale = 1d;
 
     public static double t => globalTime;
+
+    public static void SetTimeScale(double timeScale)
+    {
+        Clock.timeScale = timeScale;
+
+        GD.Print($"ClOCK: set to timescale {timeScale}");
+    }
 
     // TEMPORARY
     public override void _Ready()

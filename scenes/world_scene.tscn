@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=4 uid="uid://cf8ex730tep7q"]
+[gd_scene load_steps=31 format=4 uid="uid://cf8ex730tep7q"]
 
 [ext_resource type="Script" path="res://scripts/world/Clock.cs" id="1_i3lce"]
 [ext_resource type="Script" path="res://scripts/world/node/systems/PlanetarySystem.cs" id="2_amnnx"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/world/node/planetary/solid/SolidBody.cs" id="5_ke0jo"]
 [ext_resource type="Script" path="res://scripts/world/trajectory/Trajectory.cs" id="5_upk31"]
 [ext_resource type="Script" path="res://scripts/world/planet/terrain/PlanetaryTerrain.cs" id="6_oj2na"]
+[ext_resource type="Script" path="res://scripts/tools/TimeController.cs" id="7_84gcr"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_lyocy"]
 [ext_resource type="Script" path="res://scripts/world/Orbit.cs" id="9_x8tbr"]
 [ext_resource type="Script" path="res://scripts/ui/trajectories/ellipses/EllipseRenderer.cs" id="10_cshqn"]
@@ -108,7 +109,7 @@ script = ExtResource("3_kbqq0")
 [node name="TrajectoryManager" type="Node" parent="Council" node_paths=PackedStringArray("target", "startSystem", "trajectoryRenderer")]
 script = ExtResource("4_pyipm")
 target = NodePath("../../Environment/sunsystem/children/planetsystem/children/TrajectoryTester")
-startVelocity = Vector3(0, 35, 0)
+startVelocity = Vector3(10, -30, 10)
 startSystem = NodePath("../../Environment/sunsystem/children/planetsystem")
 trajectoryRenderer = NodePath("TrajectoryRenderer")
 update = true
@@ -117,6 +118,12 @@ update = true
 script = ExtResource("5_cu2xe")
 resolution = 75
 trajectory = SubResource("Resource_24pl3")
+
+[node name="Tools" type="Node" parent="Council"]
+
+[node name="TimeController" type="Node" parent="Council/Tools"]
+script = ExtResource("7_84gcr")
+scales = Array[int]([1, 3, 5, 10, 20])
 
 [node name="Environment" type="Node" parent="."]
 
@@ -174,7 +181,7 @@ splitDistance = 6.0
 [node name="children" type="Node3D" parent="Environment/sunsystem/children/planetsystem"]
 
 [node name="TrajectoryTester" type="Node3D" parent="Environment/sunsystem/children/planetsystem/children"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130.485, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130.485, 72.4419, -50.8459)
 
 [node name="OrbitCamera" type="Node3D" parent="Environment/sunsystem/children/planetsystem/children/TrajectoryTester"]
 script = ExtResource("12_mmhya")
