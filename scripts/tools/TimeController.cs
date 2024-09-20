@@ -3,15 +3,18 @@ using System;
 
 public partial class TimeController : Node
 {
-    [Export] Godot.Collections.Array<int> scales;
+    [Export] Godot.Collections.Array<double> scales;
+    [Export] int root;
+
     int current = 0;
+
 
     bool raise, lower, reset;
     bool w_raise, w_lower, w_reset;
 
     public override void _Ready()
     {
-        current = 0;
+        current = root;
         raise = false; lower = false; reset = false;
         w_raise = false; w_lower = false; w_reset = false;
     }
@@ -69,7 +72,7 @@ public partial class TimeController : Node
     {
         if(reset)
         {
-            current = 0;
+            current = root;
             Clock.SetTimeScale(scales[current]);
         }
         else if(lower && current > 0)
