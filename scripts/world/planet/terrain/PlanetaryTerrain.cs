@@ -136,7 +136,7 @@ public partial class PlanetaryTerrain : Node3D
 
         GenerateDynamic();
 
-        ConstructDynamicOptimised(true);
+        ConstructDynamic(true);
     }
 
     private void ConstructUniform()
@@ -148,27 +148,6 @@ public partial class PlanetaryTerrain : Node3D
                 for(int j = 0; j < chunkCount; j++)
                 {
                     terrainChunks.Get(f, i, j).ConstructUniform(chunkResolution);
-                }
-            }
-        }
-    }
-
-    private void ConstructDynamic()
-    {
-        if(dynamicTarget == null)
-        {
-            GD.PrintErr($"Can't construct dynamically, as no target is set.");
-        }
-
-        Vector3 targetPosition = dynamicTarget.GlobalPosition - GlobalPosition;
-
-        for(int f = 0; f < 6; f++)
-        {
-            for(int i = 0; i < chunkCount; i++)
-            {
-                for(int j = 0; j < chunkCount; j++)
-                {
-                    terrainChunks.Get(f, i, j).ConstructDynamic(targetPosition, maxDepth, splitDistance, Mathf.DegToRad(cullingAngle));
                 }
             }
         }
@@ -192,7 +171,7 @@ public partial class PlanetaryTerrain : Node3D
         }
     }
 
-    private void ConstructDynamicOptimised(bool overrideUpdate = false)
+    private void ConstructDynamic(bool overrideUpdate = false)
     {
         if(dynamicTarget == null) return;
 
@@ -244,7 +223,7 @@ public partial class PlanetaryTerrain : Node3D
             return;
 
             case ConstructMode.Dynamic:
-                ConstructDynamicOptimised();
+                ConstructDynamic();
             return;
 
             case ConstructMode.Debug:
