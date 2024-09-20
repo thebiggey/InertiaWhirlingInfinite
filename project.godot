@@ -11,11 +11,11 @@ config_version=5
 [application]
 
 config/name="InertiaWhirlingInfinite"
+config/version="v0.0.0"
 config/tags=PackedStringArray("double_precision")
 run/main_scene="res://scenes/world_scene.tscn"
 config/features=PackedStringArray("4.3", "C#", "Double Precision", "Forward Plus")
 config/icon="res://icon.png"
-physics/common/physics_interpolation=true
 
 [dotnet]
 
@@ -38,3 +38,8 @@ reset_time_scale={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":49,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
+
+[physics]
+
+3d/default_gravity=0.0
+physics/common/physics_interpolation=true
