@@ -11,6 +11,7 @@ public partial class TrajectoryRenderer : Node
     [Export] Trajectory trajectory;
 
     SectionRenderer[] renderers = new SectionRenderer[0];
+    int current = 0;
 
     public void SetTrajectory(Trajectory trajectory)
     {
@@ -23,6 +24,8 @@ public partial class TrajectoryRenderer : Node
         {
             renderers[i].QueueFree();
         }
+
+        current = 0;
     }
 
     public void Update()
@@ -48,9 +51,10 @@ public partial class TrajectoryRenderer : Node
 
     public void Skip()
     {
-        if(renderers.Length > 0)
+        if(current < renderers.Length)
         {
-            renderers[0].QueueFree();
+            renderers[current].QueueFree();
+            current++;
         }
     }
 }
