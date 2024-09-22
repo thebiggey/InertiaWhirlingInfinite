@@ -265,7 +265,7 @@ public partial class Orbit : Resource
 
 	public double TimeToTrueAnomaly(double t, int bound = anomalyBound)
 	{
-		double M = (n * t) % nMath.tau;
+		double M = (n * t);
 
 		if(isElliptical)
 		{
