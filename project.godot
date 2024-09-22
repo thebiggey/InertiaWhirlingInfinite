@@ -17,6 +17,11 @@ run/main_scene="res://scenes/world_scene.tscn"
 config/features=PackedStringArray("4.3", "C#", "Double Precision", "Forward Plus")
 config/icon="res://icon.png"
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
 [dotnet]
 
 project/assembly_name="InertiaWhirlingInfinite"
@@ -42,4 +47,4 @@ reset_time_scale={
 [physics]
 
 3d/default_gravity=0.0
-physics/common/physics_interpolation=true
+common/physics_interpolation=true
