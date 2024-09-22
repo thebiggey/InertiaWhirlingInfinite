@@ -12,22 +12,18 @@ public partial class Orbit : Resource
 	[Export] public double ascendingNodeLongitude;
 	[Export] public double argumentOfPeriapsis;
 
+	// I have no fucking idea why but if n isn't marked as export the objects start orbiting much faster
+	// the amount of pain this has caused me is unimaginable
+	[Export] double n;
+
 	enum Type { Elliptical, Hyperbolic }
 	[Export] Type type = Type.Elliptical;
 
-	// The multipliers for the conversion from local to world space are cached.
-	// This increases memory usage, but also improves the performance of getting the state vector.
-	// Since getting the state vector is something we have to do dozens of times each frame, this should be worth it.
-	private double XbyX;
-	private double XbyY;
-	private double YbyX;
-	private double YbyY;
-	private double ZbyX;
-	private double ZbyY;
+	// The matrix for converting from local to world space is cached, as it is needed whenever evaluating the orbit
+	// and the resulting performance improvement outweighs the additional memory cost.
+	// Since it's dimensions are constant it can be stored as a one-dimensional array
+	private readonly double[] LocalToWorldMatrix;
 
-	// I have no fucking idea why but if n isn't marked as export the objects start orbiting much faster
-	// the amount of pain this has caused me is unbelievable and i challenge the person responsible for this to a duel
-	[Export] double n;
 
 	public double a => semiMajorAxis;
 	public double e => eccentricity;
@@ -71,6 +67,28 @@ public partial class Orbit : Resource
 
 	public static readonly Vector3 referenceVector = new Vector3(0, 0, 1);
 
+
+	private double[] ComputeLocalToWorldMatrix(double i, double om, double w)
+	{
+		double[] matrix = new double[6];
+
+		double cosI = Math.Cos(i);
+		double sinI = Math.Sin(i);
+		double cosOmega = Math.Cos(om);
+		double sinOmega = Math.Sin(om);
+		double cosW = Math.Cos(w);
+		double sinW = Math.Sin(w);
+
+		matrix[0] = -(cosI * sinOmega * sinW - cosOmega * cosW);
+		matrix[1] = (cosI * sinOmega * cosW + cosOmega * sinW);
+		matrix[2] = sinI * sinW;
+		matrix[3] = -sinI * cosW;
+		matrix[4] = -(cosI * cosOmega * sinW + sinOmega * cosW);
+		matrix[5] = (cosI * cosOmega * cosW - sinOmega * sinW);
+
+		return matrix;
+	}
+
 	public Orbit()
 	{
 		this.planetarySystem = null;
@@ -83,19 +101,7 @@ public partial class Orbit : Resource
 
 		this.n = 1;
 
-		double cosOmega = Math.Cos(ascendingNodeLongitude);
-		double sinOmega = Math.Sin(ascendingNodeLongitude);
-		double cosI = Math.Cos(inclination);
-		double sinI = Math.Sin(inclination);
-		double cosW = Math.Cos(argumentOfPeriapsis);
-		double sinW = Math.Sin(argumentOfPeriapsis);
-
-		this.XbyX = -(cosI * sinOmega * sinW - cosOmega * cosW);
-		this.XbyY = (cosI * sinOmega * cosW + cosOmega * sinW);
-		this.YbyX = sinI * sinW;
-		this.YbyY = -sinI * cosW;
-		this.ZbyX = -(cosI * cosOmega * sinW + sinOmega * cosW);
-		this.ZbyY = (cosI * cosOmega * cosW - sinOmega * sinW);
+		this.LocalToWorldMatrix = ComputeLocalToWorldMatrix(0, 0, 0);
 	}
 
 	public Orbit(PlanetarySystem planetarySystem, double semiMajorAxis, double eccentricity, double inclination, double ascendingNodeLongitude, double argumentOfPeriapsis)
@@ -109,23 +115,12 @@ public partial class Orbit : Resource
 
 		this.n = Math.Sqrt(mu / Math.Abs(this.semiMajorAxis * this.semiMajorAxis * this.semiMajorAxis));
 
-		double cosOmega = Math.Cos(ascendingNodeLongitude);
-		double sinOmega = Math.Sin(ascendingNodeLongitude);
-		double cosI = Math.Cos(inclination);
-		double sinI = Math.Sin(inclination);
-		double cosW = Math.Cos(argumentOfPeriapsis);
-		double sinW = Math.Sin(argumentOfPeriapsis);
-
-		this.XbyX = -(cosI * sinOmega * sinW - cosOmega * cosW);
-		this.XbyY = (cosI * sinOmega * cosW + cosOmega * sinW);
-		this.YbyX = sinI * sinW;
-		this.YbyY = -sinI * cosW;
-		this.ZbyX = -(cosI * cosOmega * sinW + sinOmega * cosW);
-		this.ZbyY = (cosI * cosOmega * cosW - sinOmega * sinW);
+		this.LocalToWorldMatrix = ComputeLocalToWorldMatrix(inclination, ascendingNodeLongitude, argumentOfPeriapsis);
 	}
 
 	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian) : this(planetarySystem, cartesian, out _) {  }
 
+	// this shit is an absolute mess and needs to be rewritten at some point
 	public Orbit(PlanetarySystem planetarySystem, StateVector cartesian, out double trueAnomaly)
 	{
 		this.planetarySystem = planetarySystem;
@@ -221,20 +216,7 @@ public partial class Orbit : Resource
 
 		this.n = Math.Sqrt(mu / Math.Abs(this.semiMajorAxis * this.semiMajorAxis * this.semiMajorAxis));
 
-
-		double cosOmega = Math.Cos(ascendingNodeLongitude);
-		double sinOmega = Math.Sin(ascendingNodeLongitude);
-		double cosI = Math.Cos(inclination);
-		double sinI = Math.Sin(inclination);
-		double cosW = Math.Cos(argumentOfPeriapsis);
-		double sinW = Math.Sin(argumentOfPeriapsis);
-
-		this.XbyX = -(cosI * sinOmega * sinW - cosOmega * cosW);
-		this.XbyY = (cosI * sinOmega * cosW + cosOmega * sinW);
-		this.YbyX = sinI * sinW;
-		this.YbyY = -sinI * cosW;
-		this.ZbyX = -(cosI * cosOmega * sinW + sinOmega * cosW);
-		this.ZbyY = (cosI * cosOmega * cosW - sinOmega * sinW);
+		this.LocalToWorldMatrix = ComputeLocalToWorldMatrix(i, omega, arg);
 	}
 
 	public void SetPlanetarySystem(PlanetarySystem planetarySystem)
@@ -325,9 +307,9 @@ public partial class Orbit : Resource
 
 	public Vector3 LocalToWorldSpace(Vector2 v)
 	{
-		double x = v.X * XbyX + v.Y * XbyY;
-		double y = v.X * YbyX + v.Y * YbyY;
-		double z = v.X * ZbyX + v.Y * ZbyY;
+		double x = v.X * LocalToWorldMatrix[0] + v.Y * LocalToWorldMatrix[1];
+		double y = v.X * LocalToWorldMatrix[2] + v.Y * LocalToWorldMatrix[3];
+		double z = v.X * LocalToWorldMatrix[4] + v.Y * LocalToWorldMatrix[5];
 
 		return new Vector3(x, y, z);
 	}
