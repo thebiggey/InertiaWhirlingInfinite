@@ -342,7 +342,7 @@ public partial class Orbit : Resource
 		// actually causes issues, this works too.
 		t *= -1;
 
-		double M = (n * t) % nMath.tau;
+		double M = (n * t);
 
 		if(isElliptical)
 		{
