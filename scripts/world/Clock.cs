@@ -4,6 +4,8 @@ using Godot;
 [Tool]
 public partial class Clock : Node
 {
+    [Export] bool printT = false;
+
     public static double globalTime;
 
     public static double delta;
@@ -30,6 +32,7 @@ public partial class Clock : Node
         globalTime += delta * timeScale;
         Clock.delta = delta;
 
-        //GD.Print($"CLOCK: {globalTime}");
+        if(printT)
+            GD.Print($"CLOCK: {globalTime}");
     }
 }

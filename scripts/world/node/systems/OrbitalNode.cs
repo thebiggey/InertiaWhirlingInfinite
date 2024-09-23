@@ -17,14 +17,19 @@ public partial class OrbitalNode : WorldNode
     [Export] bool autoUpdate = false;
     [Export] bool setOrbit = false;
     [Export] Vector3 setVelocity = Vector3.Zero;
-    [Export] bool printVelocity = false;
+    [Export] bool printSV = false;
 
-    public StateVector GetStateVector()
+    public StateVector GetStateVector(double t)
     {
         if(orbit == null)
             return StateVector.Zero;
 
-        return orbit.GetStateVector(Clock.t + startingT);
+        return orbit.GetStateVector(t + startingT);
+    }
+
+    public StateVector GetStateVector()
+    {
+        return GetStateVector(Clock.t);
     }
 
     internal override void OnWorldLoad()
@@ -53,9 +58,9 @@ public partial class OrbitalNode : WorldNode
             StateVector stateVector = GetStateVector();
             Position = stateVector.position;
 
-            if(printVelocity)
+            if(printSV)
             {
-                GD.Print($"Velocity: {stateVector.velocity}");
+                GD.Print($"SV: {stateVector}");
                 GD.Print($"Speed: {stateVector.velocity.Length()}");
                 GD.Print($"--------------------");
             }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://cf8ex730tep7q"]
+[gd_scene load_steps=33 format=4 uid="uid://cf8ex730tep7q"]
 
 [ext_resource type="Script" path="res://scripts/world/Clock.cs" id="1_i3lce"]
 [ext_resource type="Script" path="res://scripts/world/node/systems/PlanetarySystem.cs" id="2_amnnx"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/world/trajectory/Trajectory.cs" id="5_upk31"]
 [ext_resource type="Script" path="res://scripts/world/planet/terrain/PlanetaryTerrain.cs" id="6_oj2na"]
 [ext_resource type="Script" path="res://scripts/tools/TimeController.cs" id="7_84gcr"]
+[ext_resource type="Script" path="res://scripts/tools/IntersectionVisualiser.cs" id="7_e2o1q"]
 [ext_resource type="Resource" uid="uid://bqppn85ksawoc" path="res://assets/planets/test/test_terrain.tres" id="7_lyocy"]
 [ext_resource type="Script" path="res://scripts/world/Orbit.cs" id="9_x8tbr"]
 [ext_resource type="Script" path="res://scripts/ui/trajectories/ellipses/EllipseRenderer.cs" id="10_cshqn"]
@@ -25,19 +26,21 @@
 script = ExtResource("5_upk31")
 trajectorySections = [SubResource("Resource_annvp"), SubResource("Resource_2ggwv")]
 
+[sub_resource type="SphereMesh" id="SphereMesh_rjwdg"]
+
 [sub_resource type="SphereMesh" id="SphereMesh_t37ht"]
 
-[sub_resource type="Resource" id="Resource_1iwxb"]
-script = ExtResource("9_x8tbr")
-semiMajorAxis = 519.747
-eccentricity = 0.0952237
-inclination = 0.0
-ascendingNodeLongitude = 4.71239
-argumentOfPeriapsis = 0.655766
-type = 0
-n = 0.130743
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_q0qt1"]
+
+[sub_resource type="Resource" id="Resource_kxr7c"]
+script = ExtResource("9_x8tbr")
+semiMajorAxis = 367.243
+eccentricity = 0.52845
+inclination = 3.14159
+ascendingNodeLongitude = 0.0
+argumentOfPeriapsis = 6.19242
+n = 0.220128
+type = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_woywt"]
 _surfaces = [{
@@ -66,25 +69,25 @@ transparency = 1
 shading_mode = 0
 albedo_color = Color(0.517184, 0.517184, 0.517184, 0.156863)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_m47uc"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_pb8dh"]
 _surfaces = [{
-"aabb": AABB(-555.362, -8, -564.954, 1049.89, 12, 1051.28),
+"aabb": AABB(-566.98, -4, -301.361, 747.247, 12, 638.14),
 "format": 34359742465,
 "index_count": 1260,
 "index_data": PackedByteArray("AwAEAAEAAQAAAAMABAAFAAIAAgABAAQABQADAAAAAAACAAUABgAHAAQABAADAAYABwAIAAUABQAEAAcACAAGAAMAAwAFAAgACQAKAAcABwAGAAkACgALAAgACAAHAAoACwAJAAYABgAIAAsADAANAAoACgAJAAwADQAOAAsACwAKAA0ADgAMAAkACQALAA4ADwAQAA0ADQAMAA8AEAARAA4ADgANABAAEQAPAAwADAAOABEAEgATABAAEAAPABIAEwAUABEAEQAQABMAFAASAA8ADwARABQAFQAWABMAEwASABUAFgAXABQAFAATABYAFwAVABIAEgAUABcAGAAZABYAFgAVABgAGQAaABcAFwAWABkAGgAYABUAFQAXABoAGwAcABkAGQAYABsAHAAdABoAGgAZABwAHQAbABgAGAAaAB0AHgAfABwAHAAbAB4AHwAgAB0AHQAcAB8AIAAeABsAGwAdACAAIQAiAB8AHwAeACEAIgAjACAAIAAfACIAIwAhAB4AHgAgACMAJAAlACIAIgAhACQAJQAmACMAIwAiACUAJgAkACEAIQAjACYAJwAoACUAJQAkACcAKAApACYAJgAlACgAKQAnACQAJAAmACkAKgArACgAKAAnACoAKwAsACkAKQAoACsALAAqACcAJwApACwALQAuACsAKwAqAC0ALgAvACwALAArAC4ALwAtACoAKgAsAC8AMAAxAC4ALgAtADAAMQAyAC8ALwAuADEAMgAwAC0ALQAvADIAMwA0ADEAMQAwADMANAA1ADIAMgAxADQANQAzADAAMAAyADUANgA3ADQANAAzADYANwA4ADUANQA0ADcAOAA2ADMAMwA1ADgAOQA6ADcANwA2ADkAOgA7ADgAOAA3ADoAOwA5ADYANgA4ADsAPAA9ADoAOgA5ADwAPQA+ADsAOwA6AD0APgA8ADkAOQA7AD4APwBAAD0APQA8AD8AQABBAD4APgA9AEAAQQA/ADwAPAA+AEEAQgBDAEAAQAA/AEIAQwBEAEEAQQBAAEMARABCAD8APwBBAEQARQBGAEMAQwBCAEUARgBHAEQARABDAEYARwBFAEIAQgBEAEcASABJAEYARgBFAEgASQBKAEcARwBGAEkASgBIAEUARQBHAEoASwBMAEkASQBIAEsATABNAEoASgBJAEwATQBLAEgASABKAE0ATgBPAEwATABLAE4ATwBQAE0ATQBMAE8AUABOAEsASwBNAFAAUQBSAE8ATwBOAFEAUgBTAFAAUABPAFIAUwBRAE4ATgBQAFMAVABVAFIAUgBRAFQAVQBWAFMAUwBSAFUAVgBUAFEAUQBTAFYAVwBYAFUAVQBUAFcAWABZAFYAVgBVAFgAWQBXAFQAVABWAFkAWgBbAFgAWABXAFoAWwBcAFkAWQBYAFsAXABaAFcAVwBZAFwAXQBeAFsAWwBaAF0AXgBfAFwAXABbAF4AXwBdAFoAWgBcAF8AYABhAF4AXgBdAGAAYQBiAF8AXwBeAGEAYgBgAF0AXQBfAGIAYwBkAGEAYQBgAGMAZABlAGIAYgBhAGQAZQBjAGAAYABiAGUAZgBnAGQAZABjAGYAZwBoAGUAZQBkAGcAaABmAGMAYwBlAGgAaQBqAGcAZwBmAGkAagBrAGgAaABnAGoAawBpAGYAZgBoAGsAbABtAGoAagBpAGwAbQBuAGsAawBqAG0AbgBsAGkAaQBrAG4AbwBwAG0AbQBsAG8AcABxAG4AbgBtAHAAcQBvAGwAbABuAHEAcgBzAHAAcABvAHIAcwB0AHEAcQBwAHMAdAByAG8AbwBxAHQAdQB2AHMAcwByAHUAdgB3AHQAdABzAHYAdwB1AHIAcgB0AHcAeAB5AHYAdgB1AHgAeQB6AHcAdwB2AHkAegB4AHUAdQB3AHoAewB8AHkAeQB4AHsAfAB9AHoAegB5AHwAfQB7AHgAeAB6AH0AfgB/AHwAfAB7AH4AfwCAAH0AfQB8AH8AgAB+AHsAewB9AIAAgQCCAH8AfwB+AIEAggCDAIAAgAB/AIIAgwCBAH4AfgCAAIMAhACFAIIAggCBAIQAhQCGAIMAgwCCAIUAhgCEAIEAgQCDAIYAhwCIAIUAhQCEAIcAiACJAIYAhgCFAIgAiQCHAIQAhACGAIkAigCLAIgAiACHAIoAiwCMAIkAiQCIAIsAjACKAIcAhwCJAIwAjQCOAIsAiwCKAI0AjgCPAIwAjACLAI4AjwCNAIoAigCMAI8AkACRAI4AjgCNAJAAkQCSAI8AjwCOAJEAkgCQAI0AjQCPAJIAkwCUAJEAkQCQAJMAlACVAJIAkgCRAJQAlQCTAJAAkACSAJUAlgCXAJQAlACTAJYAlwCYAJUAlQCUAJcAmACWAJMAkwCVAJgAmQCaAJcAlwCWAJkAmgCbAJgAmACXAJoAmwCZAJYAlgCYAJsAnACdAJoAmgCZAJwAnQCeAJsAmwCaAJ0AngCcAJkAmQCbAJ4AnwCgAJ0AnQCcAJ8AoAChAJ4AngCdAKAAoQCfAJwAnACeAKEAogCjAKAAoACfAKIAowCkAKEAoQCgAKMApACiAJ8AnwChAKQApQCmAKMAowCiAKUApgCnAKQApACjAKYApwClAKIAogCkAKcAqACpAKYApgClAKgAqQCqAKcApwCmAKkAqgCoAKUApQCnAKoAqwCsAKkAqQCoAKsArACtAKoAqgCpAKwArQCrAKgAqACqAK0ArgCvAKwArACrAK4ArwCwAK0ArQCsAK8AsACuAKsAqwCtALAAsQCyAK8ArwCuALEAsgCzALAAsACvALIAswCxAK4ArgCwALMAtAC1ALIAsgCxALQAtQC2ALMAswCyALUAtgC0ALEAsQCzALYAtwC4ALUAtQC0ALcAuAC5ALYAtgC1ALgAuQC3ALQAtAC2ALkAugC7ALgAuAC3ALoAuwC8ALkAuQC4ALsAvAC6ALcAtwC5ALwAvQC+ALsAuwC6AL0AvgC/ALwAvAC7AL4AvwC9ALoAugC8AL8AwADBAL4AvgC9AMAAwQDCAL8AvwC+AMEAwgDAAL0AvQC/AMIAwwDEAMEAwQDAAMMAxADFAMIAwgDBAMQAxQDDAMAAwADCAMUAxgDHAMQAxADDAMYAxwDIAMUAxQDEAMcAyADGAMMAwwDFAMgAyQDKAMcAxwDGAMkAygDLAMgAyADHAMoAywDJAMYAxgDIAMsAzADNAMoAygDJAMwAzQDOAMsAywDKAM0AzgDMAMkAyQDLAM4AzwDQAM0AzQDMAM8A0ADRAM4AzgDNANAA0QDPAMwAzADOANEAAAABANAA0ADPAAAAAQACANEA0QDQAAEAAgAAAM8AzwDRAAIA"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 210,
-"vertex_data": PackedByteArray("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")
+"vertex_data": PackedByteArray("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")
 }]
 
-[sub_resource type="Resource" id="Resource_xcw6c"]
+[sub_resource type="Resource" id="Resource_dd7aa"]
 script = ExtResource("11_vwou0")
-centre = Vector3(-30.1787, 0, -39.2266)
-a = 519.747
-b = 517.385
-aDir = Vector3(-0.609766, 0, -0.792581)
-bDir = Vector3(0.792581, 0, -0.609766)
+centre = Vector3(-193.271, 2.15416e-15, 17.5901)
+a = 367.243
+b = 311.776
+aDir = Vector3(-0.995884, 1.11e-17, 0.0906381)
+bDir = Vector3(0.0906381, 1.21961e-16, 0.995884)
 
 [sub_resource type="SphereMesh" id="SphereMesh_cmnxo"]
 
@@ -106,18 +109,28 @@ script = ExtResource("2_yhxhm")
 [node name="GravityManager" type="Node" parent="Council"]
 script = ExtResource("3_kbqq0")
 
-[node name="TrajectoryManager" type="Node" parent="Council" node_paths=PackedStringArray("target", "startSystem", "trajectoryRenderer")]
+[node name="TrajectoryManager" type="Node" parent="Council" node_paths=PackedStringArray("target", "startSystem", "trajectoryRenderer", "intervis")]
 script = ExtResource("4_pyipm")
-target = NodePath("../../Environment/sunsystem/children/planetsystem/children/TrajectoryTester")
-startVelocity = Vector3(10, -30, 10)
-startSystem = NodePath("../../Environment/sunsystem/children/planetsystem")
+target = NodePath("../../Environment/sunsystem/children/TrajectoryTester")
+startVelocity = Vector3(-75, -10, 10)
+startSystem = NodePath("../../Environment/sunsystem")
 trajectoryRenderer = NodePath("TrajectoryRenderer")
+intervis = NodePath("IntersectionVisualiser")
 update = true
 
 [node name="TrajectoryRenderer" type="Node" parent="Council/TrajectoryManager"]
 script = ExtResource("5_cu2xe")
 resolution = 75
 trajectory = SubResource("Resource_24pl3")
+
+[node name="IntersectionVisualiser" type="Node" parent="Council/TrajectoryManager" node_paths=PackedStringArray("template", "nodes")]
+script = ExtResource("7_e2o1q")
+template = NodePath("MeshInstance3D")
+nodes = []
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Council/TrajectoryManager/IntersectionVisualiser"]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
+mesh = SubResource("SphereMesh_rjwdg")
 
 [node name="Tools" type="Node" parent="Council"]
 
@@ -132,7 +145,7 @@ root = 2
 script = ExtResource("2_amnnx")
 mass = 200000.0
 systemRadius = 10000.0
-childSystems = []
+childSystems = [NodePath("children/planetsystem")]
 update = false
 update = false
 
@@ -146,18 +159,35 @@ skeleton = NodePath("../..")
 
 [node name="children" type="Node3D" parent="Environment/sunsystem"]
 
+[node name="TrajectoryTester" type="Node3D" parent="Environment/sunsystem/children"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.44026, 135.792, -395.758)
+
+[node name="OrbitCamera" type="Node3D" parent="Environment/sunsystem/children/TrajectoryTester"]
+script = ExtResource("12_mmhya")
+
+[node name="Rotator" type="Node3D" parent="Environment/sunsystem/children/TrajectoryTester/OrbitCamera"]
+
+[node name="Camera3D" type="Camera3D" parent="Environment/sunsystem/children/TrajectoryTester/OrbitCamera/Rotator"]
+transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 0, 0, 0)
+current = true
+far = 200000.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/sunsystem/children/TrajectoryTester"]
+transform = Transform3D(11.7466, 0, 0, 0, 11.7466, 0, 0, 0, 11.7466, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_q0qt1")
+
 [node name="planetsystem" type="Node3D" parent="Environment/sunsystem/children" node_paths=PackedStringArray("childSystems", "parentSystem", "ellipseRenderer")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -137.581, 0, 509.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -447.999, 0, 225.235)
 script = ExtResource("2_amnnx")
 mass = 10000.0
 systemRadius = 250.0
 childSystems = []
-orbit = SubResource("Resource_1iwxb")
-startingT = 13.475
+orbit = SubResource("Resource_kxr7c")
+startingT = 13.0
 parentSystem = NodePath("../..")
 ellipseRenderer = NodePath("../systemorbitrenderer")
 update = false
-setVelocity = Vector3(0, 0, 64.105)
+setVelocity = Vector3(0, 0, -45)
 update = false
 
 [node name="body" type="Node3D" parent="Environment/sunsystem/children/planetsystem"]
@@ -169,10 +199,10 @@ radius = 100.0
 [node name="terrain" type="Node3D" parent="Environment/sunsystem/children/planetsystem/body/planetarybody" node_paths=PackedStringArray("dynamicTarget")]
 script = ExtResource("6_oj2na")
 terrainSettings = ExtResource("7_lyocy")
-constructMode = 0
+constructMode = 1
 chunkCount = 5
 chunkResolution = 5
-dynamicTarget = NodePath("../../../children/TrajectoryTester")
+dynamicTarget = NodePath("../../../../TrajectoryTester")
 cullingAngle = 90.0
 maxDepth = 6
 splitDistance = 6.0
@@ -180,23 +210,6 @@ splitDistance = 6.0
 [node name="chunks" type="Node3D" parent="Environment/sunsystem/children/planetsystem/body/planetarybody/terrain"]
 
 [node name="children" type="Node3D" parent="Environment/sunsystem/children/planetsystem"]
-
-[node name="TrajectoryTester" type="Node3D" parent="Environment/sunsystem/children/planetsystem/children"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130.485, 72.4419, -50.8459)
-
-[node name="OrbitCamera" type="Node3D" parent="Environment/sunsystem/children/planetsystem/children/TrajectoryTester"]
-script = ExtResource("12_mmhya")
-
-[node name="Rotator" type="Node3D" parent="Environment/sunsystem/children/planetsystem/children/TrajectoryTester/OrbitCamera"]
-
-[node name="Camera3D" type="Camera3D" parent="Environment/sunsystem/children/planetsystem/children/TrajectoryTester/OrbitCamera/Rotator"]
-transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 0, 0, 0)
-current = true
-far = 200000.0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/sunsystem/children/planetsystem/children/TrajectoryTester"]
-transform = Transform3D(11.7466, 0, 0, 0, 11.7466, 0, 0, 0, 11.7466, 0, 0, 0)
-mesh = SubResource("CapsuleMesh_q0qt1")
 
 [node name="EllipseRenderer" type="MeshInstance3D" parent="Environment/sunsystem/children/planetsystem/children"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.725718, 0, -0.320918)
@@ -216,14 +229,13 @@ mesh = SubResource("SphereMesh_00gff")
 surface_material_override/0 = SubResource("StandardMaterial3D_odhtp")
 
 [node name="systemorbitrenderer" type="MeshInstance3D" parent="Environment/sunsystem/children"]
-mesh = SubResource("ArrayMesh_m47uc")
+mesh = SubResource("ArrayMesh_pb8dh")
 script = ExtResource("10_cshqn")
 resolution = 70
-ellipse = SubResource("Resource_xcw6c")
+ellipse = SubResource("Resource_dd7aa")
 size = 8.0
-normal = Vector3(0, -1, 0)
+normal = Vector3(1.54074e-33, 1, -1.22465e-16)
 loop = true
-global = true
 
 [node name="soi" type="MeshInstance3D" parent="Environment/sunsystem"]
 transform = Transform3D(20000, 0, 0, 0, 20000, 0, 0, 0, 20000, 0, 0, 0)
