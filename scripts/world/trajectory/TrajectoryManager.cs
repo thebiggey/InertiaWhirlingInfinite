@@ -28,11 +28,11 @@ public partial class TrajectoryManager : Node
     */
     (double, PlanetarySystem) GetIntersections(TrajectorySection section, double time)
     {
-        const double m = 0.25d;
-        const double dt_min = 0.000000001d;
-        const double dt_max_r = 0.2d;
-        const double epsilon = 0.0001d;
-        const int N = 500;
+        const double m = 0.6d;
+        const double dt_min = 0.0000001d;
+        const double dt_max_r = 0.25d;
+        const double epsilon = 0.005d;
+        const int N = 60;
         const int p = 3;
 
         Orbit orbit = section.orbit;
@@ -56,7 +56,7 @@ public partial class TrajectoryManager : Node
         {
             double r = child.systemRadius;
 
-            if(child.orbit.Apoapsis > apoapsis + r || child.orbit.Periapsis < periapsis - r)
+            if(periapsis > child.orbit.Apoapsis + r || apoapsis < child.orbit.Periapsis - r)
             {
                 continue;
             }
@@ -94,7 +94,6 @@ public partial class TrajectoryManager : Node
 
             positions.Add(targetSV.position);
 
-
             double[] dt_arr = new double[l];
 
             for(int j = 0; j < l; j++)
@@ -108,38 +107,49 @@ public partial class TrajectoryManager : Node
 
                 double d = sv.position.Length() - (system.systemRadius);
 
+                int sign = 1;
+
                 if(Math.Abs(d) < epsilon)
                 {
                     GD.Print($"Intersection found; t: {t}, d: {d}, sys: {system.Name}");
                     intervis.Visualise(parentSystem, positions);
                     return (t, system);
                 }
+                else if(d < 0)
+                {
+                    sign = -1;
+                }
+
 
                 // this calculates the velocity component along the position
                 // basically this measures how fast the target is moving towards the system
-                double a = nMath.VectorComponent(sv.velocity, sv.position);
+                double a = -nMath.VectorComponent(sv.velocity, sv.position);
 
-                //GD.Print($"d: {d}");
-                //GD.Print($"a: {a}");
-                //GD.Print($"ratio: {d / a}");
+                GD.Print($"d: {d}");
+                GD.Print($"a: {a}");
+                GD.Print($"ratio: {d / a}");
 
-                if(a == 0)
+                // this would mean the target is moving away from the system
+                if(a < 0)
                 {
                     dt_arr[j] = dt_max;
                 }
                 else
                 {
-                    dt_arr[j] = Math.Abs(d / a);
+                    dt_arr[j] = sign * Math.Abs(d / a);
                 }
 
             }
 
-            double dt = Math.Max(dt_min, nMath.Min(dt_arr)) * m;
+            double dt = nMath.MinAbs(dt_arr) * m;
 
-            GD.Print($"dt: {dt}");
+            if(Math.Abs(dt) < dt_min)
+            {
+                dt = dt_min * Math.Sign(dt);
+            }
 
             GD.Print($"i: {i}, t: {t}, dt: {dt}");
-            GD.Print("---------------------");
+            GD.Print($"---------------------");
 
             intervis.Visualise(parentSystem, positions);
 

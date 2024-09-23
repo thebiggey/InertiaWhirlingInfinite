@@ -86,30 +86,16 @@ public class nMath
         return - Mathf.Log(Mathf.Exp(-k * x) + Mathf.Exp(-k * y)) / k;
     }
 
-    public static double Max(double[] arr)
-    {
-        double max = double.NegativeInfinity;
-
-        for(int i = 0; i < arr.Length; i++)
-        {
-            if(arr[i] > max)
-            {
-                max = arr[i];
-            }
-        }
-
-        return max;
-    }
-
-    public static double Min(double[] arr)
+    public static double MinAbs(double[] arr)
     {
         double min = double.PositiveInfinity;
 
         for(int i = 0; i < arr.Length; i++)
         {
-            if(arr[i] < min)
+            double val = Math.Abs(arr[i]);
+            if(val < min)
             {
-                min = arr[i];
+                min = val;
             }
         }
 
