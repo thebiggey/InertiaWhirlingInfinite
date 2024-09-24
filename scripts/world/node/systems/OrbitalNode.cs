@@ -10,7 +10,7 @@ public partial class OrbitalNode : WorldNode
 
     [ExportGroup("References")]
     [Export] public PlanetarySystem parentSystem;
-    [Export] EllipseRenderer ellipseRenderer;
+    [Export] SectionRenderer sectionRenderer;
 
     [ExportGroup("Controls")]
     [Export] bool update = false;
@@ -34,21 +34,31 @@ public partial class OrbitalNode : WorldNode
 
     internal override void OnWorldLoad()
     {
-        orbit.SetPlanetarySystem(parentSystem);
+        if(orbit != null)
+        {
+            orbit.SetPlanetarySystem(parentSystem);
+        }
+
+        if(sectionRenderer != null)
+        {
+            sectionRenderer.SetSection(orbit);
+            sectionRenderer.Update();
+        }
     }
 
-    public override void _PhysicsProcess(double delta)
+    internal override void Update(double delta)
     {
-        if(setOrbit)
+        if(setOrbit && Engine.IsEditorHint())
         {
             setOrbit = false;
 
             orbit = new Orbit(parentSystem, new StateVector(Position, setVelocity));
 
-            if(ellipseRenderer == null) return;
-
-            ellipseRenderer.SetEllipse(orbit);
-            ellipseRenderer.Update();
+            if(sectionRenderer != null)
+            {
+                sectionRenderer.SetSection(orbit);
+                sectionRenderer.Update();
+            }
         }
 
         if(!Engine.IsEditorHint() || update || autoUpdate)

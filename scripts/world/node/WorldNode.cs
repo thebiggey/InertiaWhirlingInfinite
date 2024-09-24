@@ -7,10 +7,6 @@ public partial class WorldNode : Node3D
     [ExportGroup("Parameters")]
     [Export] double loadingRadius = 0;
 
-    [ExportGroup("Debug")]
-    [Export] bool update = true;
-    [ExportGroup("")]
-
     Node3D body;
 
     private bool loaded;
@@ -59,7 +55,7 @@ public partial class WorldNode : Node3D
             FreeNode();
         }
 
-        if(loaded && update)
+        if(loaded)
             Update(delta);
 
         wasLoaded = loaded;

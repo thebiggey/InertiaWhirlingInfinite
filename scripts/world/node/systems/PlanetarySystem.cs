@@ -20,8 +20,7 @@ public partial class PlanetarySystem : OrbitalNode
 
     internal override void OnWorldLoad()
     {
-        if(orbit != null)
-            orbit.SetPlanetarySystem(parentSystem);
+        base.OnWorldLoad();
 
         childrenContainer = GetChild<Node3D>(1);
     }

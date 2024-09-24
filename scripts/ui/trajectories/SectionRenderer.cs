@@ -1,11 +1,18 @@
 using Godot;
 using System;
 
+[Tool]
 public partial class SectionRenderer : LineRenderer
 {
-    [Export] int resolution = 20;
+    [Export] int resolution = 30;
 
     [Export] TrajectorySection section;
+
+    public SectionRenderer()
+    {
+        this.resolution = 30;
+        this.section = new TrajectorySection();
+    }
 
     public SectionRenderer(int resolution, double size, TrajectorySection section)
     {

@@ -26,6 +26,13 @@ public partial class TrajectorySection : Resource
         }
     }
 
+    public TrajectorySection()
+    {
+        this.orbit = new Orbit();
+        this.startT = 0;
+        this.endT = double.NaN;
+    }
+
     public TrajectorySection(Orbit orbit, double startT, double endT)
     {
         this.orbit = orbit;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=4 uid="uid://cf8ex730tep7q"]
+[gd_scene load_steps=35 format=4 uid="uid://cf8ex730tep7q"]
 
 [ext_resource type="Script" path="res://scripts/world/Clock.cs" id="1_i3lce"]
 [ext_resource type="Script" path="res://scripts/world/node/systems/PlanetarySystem.cs" id="2_amnnx"]
@@ -17,6 +17,8 @@
 [ext_resource type="Script" path="res://scripts/ui/trajectories/ellipses/EllipseRenderer.cs" id="10_cshqn"]
 [ext_resource type="Script" path="res://scripts/ui/trajectories/ellipses/Ellipse.cs" id="11_vwou0"]
 [ext_resource type="Script" path="res://scripts/tools/OrbitCamera.cs" id="12_mmhya"]
+[ext_resource type="Script" path="res://scripts/ui/trajectories/SectionRenderer.cs" id="18_o7yjn"]
+[ext_resource type="Script" path="res://scripts/world/trajectory/TrajectorySection.cs" id="19_n317l"]
 
 [sub_resource type="Resource" id="Resource_annvp"]
 
@@ -69,25 +71,21 @@ transparency = 1
 shading_mode = 0
 albedo_color = Color(0.517184, 0.517184, 0.517184, 0.156863)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_pb8dh"]
-_surfaces = [{
-"aabb": AABB(-566.98, -4, -301.361, 747.247, 12, 638.14),
-"format": 34359742465,
-"index_count": 1260,
-"index_data": PackedByteArray("AwAEAAEAAQAAAAMABAAFAAIAAgABAAQABQADAAAAAAACAAUABgAHAAQABAADAAYABwAIAAUABQAEAAcACAAGAAMAAwAFAAgACQAKAAcABwAGAAkACgALAAgACAAHAAoACwAJAAYABgAIAAsADAANAAoACgAJAAwADQAOAAsACwAKAA0ADgAMAAkACQALAA4ADwAQAA0ADQAMAA8AEAARAA4ADgANABAAEQAPAAwADAAOABEAEgATABAAEAAPABIAEwAUABEAEQAQABMAFAASAA8ADwARABQAFQAWABMAEwASABUAFgAXABQAFAATABYAFwAVABIAEgAUABcAGAAZABYAFgAVABgAGQAaABcAFwAWABkAGgAYABUAFQAXABoAGwAcABkAGQAYABsAHAAdABoAGgAZABwAHQAbABgAGAAaAB0AHgAfABwAHAAbAB4AHwAgAB0AHQAcAB8AIAAeABsAGwAdACAAIQAiAB8AHwAeACEAIgAjACAAIAAfACIAIwAhAB4AHgAgACMAJAAlACIAIgAhACQAJQAmACMAIwAiACUAJgAkACEAIQAjACYAJwAoACUAJQAkACcAKAApACYAJgAlACgAKQAnACQAJAAmACkAKgArACgAKAAnACoAKwAsACkAKQAoACsALAAqACcAJwApACwALQAuACsAKwAqAC0ALgAvACwALAArAC4ALwAtACoAKgAsAC8AMAAxAC4ALgAtADAAMQAyAC8ALwAuADEAMgAwAC0ALQAvADIAMwA0ADEAMQAwADMANAA1ADIAMgAxADQANQAzADAAMAAyADUANgA3ADQANAAzADYANwA4ADUANQA0ADcAOAA2ADMAMwA1ADgAOQA6ADcANwA2ADkAOgA7ADgAOAA3ADoAOwA5ADYANgA4ADsAPAA9ADoAOgA5ADwAPQA+ADsAOwA6AD0APgA8ADkAOQA7AD4APwBAAD0APQA8AD8AQABBAD4APgA9AEAAQQA/ADwAPAA+AEEAQgBDAEAAQAA/AEIAQwBEAEEAQQBAAEMARABCAD8APwBBAEQARQBGAEMAQwBCAEUARgBHAEQARABDAEYARwBFAEIAQgBEAEcASABJAEYARgBFAEgASQBKAEcARwBGAEkASgBIAEUARQBHAEoASwBMAEkASQBIAEsATABNAEoASgBJAEwATQBLAEgASABKAE0ATgBPAEwATABLAE4ATwBQAE0ATQBMAE8AUABOAEsASwBNAFAAUQBSAE8ATwBOAFEAUgBTAFAAUABPAFIAUwBRAE4ATgBQAFMAVABVAFIAUgBRAFQAVQBWAFMAUwBSAFUAVgBUAFEAUQBTAFYAVwBYAFUAVQBUAFcAWABZAFYAVgBVAFgAWQBXAFQAVABWAFkAWgBbAFgAWABXAFoAWwBcAFkAWQBYAFsAXABaAFcAVwBZAFwAXQBeAFsAWwBaAF0AXgBfAFwAXABbAF4AXwBdAFoAWgBcAF8AYABhAF4AXgBdAGAAYQBiAF8AXwBeAGEAYgBgAF0AXQBfAGIAYwBkAGEAYQBgAGMAZABlAGIAYgBhAGQAZQBjAGAAYABiAGUAZgBnAGQAZABjAGYAZwBoAGUAZQBkAGcAaABmAGMAYwBlAGgAaQBqAGcAZwBmAGkAagBrAGgAaABnAGoAawBpAGYAZgBoAGsAbABtAGoAagBpAGwAbQBuAGsAawBqAG0AbgBsAGkAaQBrAG4AbwBwAG0AbQBsAG8AcABxAG4AbgBtAHAAcQBvAGwAbABuAHEAcgBzAHAAcABvAHIAcwB0AHEAcQBwAHMAdAByAG8AbwBxAHQAdQB2AHMAcwByAHUAdgB3AHQAdABzAHYAdwB1AHIAcgB0AHcAeAB5AHYAdgB1AHgAeQB6AHcAdwB2AHkAegB4AHUAdQB3AHoAewB8AHkAeQB4AHsAfAB9AHoAegB5AHwAfQB7AHgAeAB6AH0AfgB/AHwAfAB7AH4AfwCAAH0AfQB8AH8AgAB+AHsAewB9AIAAgQCCAH8AfwB+AIEAggCDAIAAgAB/AIIAgwCBAH4AfgCAAIMAhACFAIIAggCBAIQAhQCGAIMAgwCCAIUAhgCEAIEAgQCDAIYAhwCIAIUAhQCEAIcAiACJAIYAhgCFAIgAiQCHAIQAhACGAIkAigCLAIgAiACHAIoAiwCMAIkAiQCIAIsAjACKAIcAhwCJAIwAjQCOAIsAiwCKAI0AjgCPAIwAjACLAI4AjwCNAIoAigCMAI8AkACRAI4AjgCNAJAAkQCSAI8AjwCOAJEAkgCQAI0AjQCPAJIAkwCUAJEAkQCQAJMAlACVAJIAkgCRAJQAlQCTAJAAkACSAJUAlgCXAJQAlACTAJYAlwCYAJUAlQCUAJcAmACWAJMAkwCVAJgAmQCaAJcAlwCWAJkAmgCbAJgAmACXAJoAmwCZAJYAlgCYAJsAnACdAJoAmgCZAJwAnQCeAJsAmwCaAJ0AngCcAJkAmQCbAJ4AnwCgAJ0AnQCcAJ8AoAChAJ4AngCdAKAAoQCfAJwAnACeAKEAogCjAKAAoACfAKIAowCkAKEAoQCgAKMApACiAJ8AnwChAKQApQCmAKMAowCiAKUApgCnAKQApACjAKYApwClAKIAogCkAKcAqACpAKYApgClAKgAqQCqAKcApwCmAKkAqgCoAKUApQCnAKoAqwCsAKkAqQCoAKsArACtAKoAqgCpAKwArQCrAKgAqACqAK0ArgCvAKwArACrAK4ArwCwAK0ArQCsAK8AsACuAKsAqwCtALAAsQCyAK8ArwCuALEAsgCzALAAsACvALIAswCxAK4ArgCwALMAtAC1ALIAsgCxALQAtQC2ALMAswCyALUAtgC0ALEAsQCzALYAtwC4ALUAtQC0ALcAuAC5ALYAtgC1ALgAuQC3ALQAtAC2ALkAugC7ALgAuAC3ALoAuwC8ALkAuQC4ALsAvAC6ALcAtwC5ALwAvQC+ALsAuwC6AL0AvgC/ALwAvAC7AL4AvwC9ALoAugC8AL8AwADBAL4AvgC9AMAAwQDCAL8AvwC+AMEAwgDAAL0AvQC/AMIAwwDEAMEAwQDAAMMAxADFAMIAwgDBAMQAxQDDAMAAwADCAMUAxgDHAMQAxADDAMYAxwDIAMUAxQDEAMcAyADGAMMAwwDFAMgAyQDKAMcAxwDGAMkAygDLAMgAyADHAMoAywDJAMYAxgDIAMsAzADNAMoAygDJAMwAzQDOAMsAywDKAM0AzgDMAMkAyQDLAM4AzwDQAM0AzQDMAM8A0ADRAM4AzgDNANAA0QDPAMwAzADOANEAAAABANAA0ADPAAAAAQACANEA0QDQAAEAAgAAAM8AzwDRAAIA"),
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 210,
-"vertex_data": PackedByteArray("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")
-}]
+[sub_resource type="Resource" id="Resource_rdopq"]
+script = ExtResource("9_x8tbr")
+semiMajorAxis = 1.0
+eccentricity = 0.0
+inclination = 0.0
+ascendingNodeLongitude = 0.0
+argumentOfPeriapsis = 0.0
+n = 1.0
+type = 0
 
-[sub_resource type="Resource" id="Resource_dd7aa"]
-script = ExtResource("11_vwou0")
-centre = Vector3(-193.271, 2.15416e-15, 17.5901)
-a = 367.243
-b = 311.776
-aDir = Vector3(-0.995884, 1.11e-17, 0.0906381)
-bDir = Vector3(0.0906381, 1.21961e-16, 0.995884)
+[sub_resource type="Resource" id="Resource_h5mr8"]
+script = ExtResource("19_n317l")
+orbit = SubResource("Resource_rdopq")
+startT = 0.0
+endT = nan
 
 [sub_resource type="SphereMesh" id="SphereMesh_cmnxo"]
 
@@ -146,8 +144,6 @@ script = ExtResource("2_amnnx")
 mass = 200000.0
 systemRadius = 10000.0
 childSystems = [NodePath("children/planetsystem")]
-update = false
-update = false
 
 [node name="body" type="Node3D" parent="Environment/sunsystem"]
 script = ExtResource("5_cr24l")
@@ -176,8 +172,8 @@ far = 200000.0
 transform = Transform3D(11.7466, 0, 0, 0, 11.7466, 0, 0, 0, 11.7466, 0, 0, 0)
 mesh = SubResource("CapsuleMesh_q0qt1")
 
-[node name="planetsystem" type="Node3D" parent="Environment/sunsystem/children" node_paths=PackedStringArray("childSystems", "parentSystem", "ellipseRenderer")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -447.999, 0, 225.235)
+[node name="planetsystem" type="Node3D" parent="Environment/sunsystem/children" node_paths=PackedStringArray("childSystems", "parentSystem", "sectionRenderer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -507.783, 0, -162.086)
 script = ExtResource("2_amnnx")
 mass = 10000.0
 systemRadius = 250.0
@@ -185,10 +181,8 @@ childSystems = []
 orbit = SubResource("Resource_kxr7c")
 startingT = 13.0
 parentSystem = NodePath("../..")
-ellipseRenderer = NodePath("../systemorbitrenderer")
-update = false
+sectionRenderer = NodePath("../../systemsectionrenderer")
 setVelocity = Vector3(0, 0, -45)
-update = false
 
 [node name="body" type="Node3D" parent="Environment/sunsystem/children/planetsystem"]
 
@@ -228,14 +222,10 @@ transform = Transform3D(500, 0, 0, 0, 500, 0, 0, 0, 500, 0, 0, 0)
 mesh = SubResource("SphereMesh_00gff")
 surface_material_override/0 = SubResource("StandardMaterial3D_odhtp")
 
-[node name="systemorbitrenderer" type="MeshInstance3D" parent="Environment/sunsystem/children"]
-mesh = SubResource("ArrayMesh_pb8dh")
-script = ExtResource("10_cshqn")
-resolution = 70
-ellipse = SubResource("Resource_dd7aa")
-size = 8.0
-normal = Vector3(1.54074e-33, 1, -1.22465e-16)
-loop = true
+[node name="systemsectionrenderer" type="MeshInstance3D" parent="Environment/sunsystem"]
+script = ExtResource("18_o7yjn")
+section = SubResource("Resource_h5mr8")
+size = 5.0
 
 [node name="soi" type="MeshInstance3D" parent="Environment/sunsystem"]
 transform = Transform3D(20000, 0, 0, 0, 20000, 0, 0, 0, 20000, 0, 0, 0)
